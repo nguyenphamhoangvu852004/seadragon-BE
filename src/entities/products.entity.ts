@@ -44,5 +44,6 @@ export class Products extends BaseEntity {
     type: 'varchar',
     nullable: false
   })
-  public images!: string
+  public image!: string
+
 }
