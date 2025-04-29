@@ -6,6 +6,6 @@ import { productRouter } from './product.route'
 const router = Router()
 
 router.use('/auth', authRouter)
-router.use('/category', categoryRouter)
-router.use('/product', productRouter)
+router.use('/categories', categoryRouter)
+router.use('/products', productRouter)
 export const v1Router = router
