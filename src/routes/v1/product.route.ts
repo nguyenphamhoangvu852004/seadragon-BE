@@ -30,5 +30,14 @@ router.put(
   controller.restoreTemporaryProduct.bind(controller)
 )
 router.delete('/:id', controller.deleteProduct.bind(controller))
-router.post('/', uploadProducts.single('image'),controller.createProduct.bind(controller))
+router.post(
+  '/',
+  uploadProducts.single('image'),
+  controller.createProduct.bind(controller)
+)
+router.put(
+  '/:id',
+  uploadProducts.single('image'),
+  controller.updateProduct.bind(controller)
+)
 export const productRouter = router
