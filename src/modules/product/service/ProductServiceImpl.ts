@@ -7,12 +7,13 @@ export default class ProductServiceImpl implements IProductService {
   constructor(productRepository: IProductRepo) {
     this.productRepository = productRepository
   }
-  async getAllProduct(): Promise<any> {
-    const list = this.productRepository.getAllProducts()
+  async getAllProduct(categoryId: string): Promise<any> {
+    const list = this.productRepository.getAllProducts(categoryId)
     return list
   }
-  getProductById(id: string): Promise<any> {
-    throw new Error('Method not implemented.')
+  async getProductById(id: string): Promise<any> {
+    const product = this.productRepository.getProductById(id)
+    return product
   }
   createProduct(data: any): Promise<any> {
     throw new Error('Method not implemented.')
@@ -20,7 +21,22 @@ export default class ProductServiceImpl implements IProductService {
   updateProduct(data: any): Promise<any> {
     throw new Error('Method not implemented.')
   }
-  deleteProduct(id: string): Promise<any> {
-    throw new Error('Method not implemented.')
+  async deleteTemporaryProduct(id: string): Promise<any> {
+    const product = await this.productRepository.deleteTemporaryProduct(id)
+    return product
+  }
+  async restoreTemporaryProduct(id: string): Promise<any> {
+    const product = await this.productRepository.restoreTemporaryProduct(id)
+    return product
+  }
+  async deleteProduct(id: string): Promise<any> {
+    const product = await this.productRepository.deleteProduct(id)
+    return product
+  }
+
+  async getAllDeletedTemporaryProducts(categoryId: string): Promise<any> {
+    const list =
+      this.productRepository.getAllDeletedTemporaryProducts(categoryId)
+    return list
   }
 }
