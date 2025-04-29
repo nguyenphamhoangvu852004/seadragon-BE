@@ -7,6 +7,7 @@ import { AppDataSource } from './config/data-source'
 import { env } from './config/enviroment'
 import logger from './config/logger'
 import { v1Router } from './routes/v1'
+import path from 'path'
 
 // Server Configuration
 const PORT = env.PORT
@@ -33,7 +34,7 @@ const startServer = () => {
   // Middlewares
   app.use(
     cors({
-      origin: ['http://localhost:3001'],
+      origin: ['http://localhost:8080'],
       methods: ['GET', 'POST', 'PUT', 'DELETE'],
       allowedHeaders: ['Content-Type', 'Authorization'],
       credentials: true
@@ -46,7 +47,7 @@ const startServer = () => {
 
   app.use(express.json())
 
-  // app.use('/uploads', express.static(path.join(__dirname, '../uploads')))
+  app.use('/uploads', express.static(path.join(__dirname, '../uploads')))
 
   // app.use(
   //   '/static',
