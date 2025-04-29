@@ -30,7 +30,8 @@ export class Products extends BaseEntity {
 
   @Column({
     type: 'boolean',
-    nullable: false
+    nullable: false,
+    default: false
   })
   public isDeleted!: boolean
 
