@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import path from 'path'
 import { AppDataSource } from '../../../config/data-source'
 import { Products } from '../../../entities/products.entity'
 import { CreateProductDTO } from '../dto/create.product.dto'
 import IProductRepo from './IProductRepo'
-
+import fs from 'fs'
+import { UpdateProductDTO } from '../dto/update.product.dto'
 export default class ProductRepoImpl implements IProductRepo {
   productRepository: any
   categoryRepository: any
@@ -32,17 +34,28 @@ export default class ProductRepoImpl implements IProductRepo {
   }
   async createProduct(data: CreateProductDTO): Promise<any> {
     const newProduct = await this.productRepository.create({
-      name: data.name,
+      title: data.title,
       price: data.price,
       description: data.description,
       category: data.categoryId,
-      isDeleted: data.setIsDeleted()
+      image: '/uploads/products/' + data.image,
+      isDeleted: false
     })
     await this.productRepository.save(newProduct)
     return newProduct
   }
-  updateProduct(data: any): Promise<any> {
-    throw new Error('Method not implemented.')
+  async updateProduct(data: UpdateProductDTO): Promise<any> {
+    const product = await this.productRepository.findOneBy({ id: data.id })
+    if (!product) {
+      throw new Error('Product not found')
+    }
+    product.title = data.title
+    product.description = data.description
+    product.price = data.price
+    product.category = data.categoryId
+    product.image = '/uploads/products/' + data.image
+    await this.productRepository.save(product)
+    return product
   }
   async deleteTemporaryProduct(id: string): Promise<any> {
     const product = await this.productRepository.findOneBy({ id: id })
@@ -65,6 +78,28 @@ export default class ProductRepoImpl implements IProductRepo {
   }
   async deleteProduct(id: string): Promise<any> {
     const product = await this.productRepository.findOneBy({ id: id })
+    // Lấy tên file từ đường dẫn ảnh
+    const fileName = path.basename(product.image) // 'image-1745912805477-460172612.jpg'
+
+    // seadragon-BE/uploads/products
+    const fullImagePath = path.join(
+      __dirname,
+      '..',
+      '..',
+      '..',
+      '..',
+      'uploads',
+      'products',
+      fileName
+    )
+    console.log('Full image path:', fullImagePath)
+    fs.unlink(fullImagePath, (err) => {
+      if (err) {
+        console.error('Error deleting file:', err)
+      } else {
+        console.log('File deleted successfully')
+      }
+    })
     if (!product) {
       throw new Error('Product not found')
     }

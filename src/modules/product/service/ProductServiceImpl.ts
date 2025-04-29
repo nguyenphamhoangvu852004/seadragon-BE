@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { CreateProductDTO } from '../dto/create.product.dto'
+import { UpdateProductDTO } from '../dto/update.product.dto'
 import IProductRepo from '../repo/IProductRepo'
 import { IProductService } from './IProductService'
 
@@ -15,11 +17,13 @@ export default class ProductServiceImpl implements IProductService {
     const product = this.productRepository.getProductById(id)
     return product
   }
-  createProduct(data: any): Promise<any> {
-    throw new Error('Method not implemented.')
+  async createProduct(data: CreateProductDTO): Promise<any> {
+    const newProduct = await this.productRepository.createProduct(data)
+    return newProduct
   }
-  updateProduct(data: any): Promise<any> {
-    throw new Error('Method not implemented.')
+  async updateProduct(data: UpdateProductDTO): Promise<any> {
+    const product = await this.productRepository.updateProduct(data)
+    return product
   }
   async deleteTemporaryProduct(id: string): Promise<any> {
     const product = await this.productRepository.deleteTemporaryProduct(id)
