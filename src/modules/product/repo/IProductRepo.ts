@@ -7,7 +7,7 @@ export default interface IProductRepo {
   getProductById(id: string): Promise<any>
   createProduct(data: CreateProductDTO): Promise<any>
   updateProduct(data: any): Promise<any>
-  deleteTemporaryProduct(id: string): Promise<any>
+  deleteTemporaryProducts(id: number[]): Promise<any>
   restoreTemporaryProduct(id: string): Promise<any>
-  deleteProduct(id: string): Promise<any>
+  deleteProducts(ids: number[]): Promise<any>
 }
