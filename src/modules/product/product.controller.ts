@@ -1,7 +1,9 @@
+import { classToPlain } from 'class-transformer'
 import { CreateProductDTO } from './dto/create.product.dto'
 import { UpdateProductDTO } from './dto/update.product.dto'
 import { IProductService } from './service/IProductService'
 import { Request, Response } from 'express'
+import { BadRequestException } from '../../shared/BadRequest.exeception'
 export default class ProductController {
   productService: IProductService
   constructor(productService: IProductService) {
@@ -16,8 +18,9 @@ export default class ProductController {
     res.status(200).json({
       status: 200,
       message: 'Get all products successfully',
-      data: products // Replace with actual data from your service
+      data: classToPlain(products)
     })
+    return
   }
   async getAllDeletedTemporaryProducts(req: Request, res: Response) {
     const categoryId = req.query.categoryId
@@ -27,27 +30,46 @@ export default class ProductController {
     res.status(200).json({
       status: 200,
       message: 'Get all deleted temporary products successfully',
-      data: products // Replace with actual data from your service
+      data: classToPlain(products) 
     })
+    return
   }
   async getProductById(req: Request, res: Response) {
-    const id = req.params.id
-    const product = await this.productService.getProductById(id)
-    res.status(200).json({
-      status: 200,
-      message: 'Get product by id successfully',
-      data: product // Replace with actual data from your service
-    })
+    try {
+      const id = req.params.id
+      const product = await this.productService.getProductById(id)
+      res.status(200).json({
+        status: 200,
+        message: 'Get product by id successfully',
+        data: classToPlain(product) 
+      })
+      return
+    } catch (error) {
+      if (error instanceof BadRequestException) {
+        res.status(400).json({
+          status: 400,
+          message: error.message
+        })
+        return
+      }
+      res.status(404).json({
+        status: 404,
+        message: error instanceof Error ? error.message : 'An error occurred'
+      })
+      return
+    }
   }
 
-  async deleteTemporaryProduct(req: Request, res: Response) {
-    const id = req.params.id
-    const product = await this.productService.deleteTemporaryProduct(id)
+  async deleteTemporaryProducts(req: Request, res: Response) {
+    // const id = req.params.id
+    const { ids } = req.body
+    const product = await this.productService.deleteTemporaryProducts(ids)
     res.status(200).json({
       status: 200,
       message: 'Delete product successfully',
-      data: product // Replace with actual data from your service
+      data: classToPlain(product) 
     })
+    return
   }
   async restoreTemporaryProduct(req: Request, res: Response) {
     const id = req.params.id
@@ -55,18 +77,29 @@ export default class ProductController {
     res.status(200).json({
       status: 200,
       message: 'Restore product successfully',
-      data: product // Replace with actual data from your service
+      data: classToPlain(product)
     })
+    return
   }
 
   async deleteProduct(req: Request, res: Response) {
-    const id = req.params.id
-    const product = await this.productService.deleteProduct(id)
-    res.status(200).json({
-      status: 200,
-      message: 'Delete product successfully',
-      data: product // Replace with actual data from your service
-    })
+    try {
+      const { ids } = req.body
+      console.log('ids', ids)
+      const products = await this.productService.deleteProducts(ids)
+      res.status(200).json({
+        status: 200,
+        message: 'Delete products successfully',
+        data: classToPlain(products)
+      })
+      return
+    } catch (error) {
+      res.status(400).json({
+        status: 400,
+        message: error instanceof Error ? error.message : 'An error occurred'
+      })
+      return
+    }
   }
 
   async createProduct(req: Request, res: Response) {
@@ -80,11 +113,12 @@ export default class ProductController {
     newProduct.image = image
     console.log('newProduct', newProduct)
     const product = await this.productService.createProduct(newProduct)
-    res.status(200).json({
-      status: 200,
+    res.status(201).json({
+      status: 201,
       message: 'Create product successfully',
-      data: product // Replace with actual data from your service
+      data: classToPlain(product) 
     })
+    return
   }
   async updateProduct(req: Request, res: Response) {
     const id = req.params.id
@@ -103,7 +137,8 @@ export default class ProductController {
     res.status(200).json({
       status: 200,
       message: 'Update product successfully',
-      data: product // Replace with actual data from your service
+      data: classToPlain(product)
     })
+    return
   }
 }
