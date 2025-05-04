@@ -9,6 +9,7 @@ export default class CategoryServiceImpl implements ICategoryService {
   constructor(repo: ICategoryRepo) {
     this.repo = repo
   }
+
   async getAllCategories(): Promise<any> {
     return await this.repo.getAllCategories()
   }
@@ -23,7 +24,16 @@ export default class CategoryServiceImpl implements ICategoryService {
     const res = await this.repo.updateCategory(data)
     return res
   }
-  async deleteCategory(id: string): Promise<any> {
-    return await this.repo.deleteCategory(id)
+  async deleteCategory(ids: number[]): Promise<any> {
+    return await this.repo.deleteCategory(ids)
+  }
+  async deleteTemporaryCategory(ids: number[]): Promise<any> {
+    const res = await this.repo.deleteTemporaryCategory(ids)
+    return res
+  }
+
+  async restoreTemporaryCategory(id: number): Promise<any> {
+    const res = await this.repo.restoreTemporaryCategory(id)
+    return res
   }
 }
