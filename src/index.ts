@@ -34,18 +34,18 @@ const startServer = () => {
   // Middlewares
   app.use(
     cors({
-      origin: ['http://localhost:8080'],
+      origin: [String(env.CORS_ORIGIN)],
       methods: ['GET', 'POST', 'PUT', 'DELETE'],
       allowedHeaders: ['Content-Type', 'Authorization'],
       credentials: true
     })
   )
 
-  app.use(cookieParser())
+  // app.use(cookieParser())
 
   // app.use(errorHandle)
 
-  app.use(express.json())
+  app.use(express.json({ strict: true }))
 
   app.use('/uploads', express.static(path.join(__dirname, '../uploads')))
 
