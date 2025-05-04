@@ -2,6 +2,8 @@ import { Request, Response } from 'express'
 import { ICategoryService } from './service/ICategoryService'
 import { CreateCategoryDTO } from './dto/create.category.dto'
 import { UpdateCategoryDTO } from './dto/update.category.dto'
+import { classToPlain } from 'class-transformer'
+import { log } from 'console'
 
 export default class CategoryController {
   service: ICategoryService
@@ -14,8 +16,9 @@ export default class CategoryController {
     res.status(200).json({
       status: 200,
       message: 'Get all categories successfully',
-      data: list // Replace with actual data from your service
+      data: classToPlain(list) 
     })
+    return
   }
 
   async getCategoryById(req: Request, res: Response) {
@@ -24,8 +27,9 @@ export default class CategoryController {
     res.status(200).json({
       status: 200,
       message: 'Get category by id successfully',
-      data: response // Replace with actual data from your service
+      data: classToPlain(response) 
     })
+    return
   }
 
   async createCategory(req: Request, res: Response) {
@@ -36,8 +40,9 @@ export default class CategoryController {
     res.status(201).json({
       status: 201,
       message: 'Category created successfully',
-      data: response // Replace with actual data from your service
+      data: classToPlain(response) 
     })
+    return
   }
 
   async updateCategory(req: Request, res: Response) {
@@ -46,21 +51,47 @@ export default class CategoryController {
     const updateCategoryDTO = new UpdateCategoryDTO()
     updateCategoryDTO.name = name
     updateCategoryDTO.id = Number(id)
-    const response = await this.service.updateCategory(updateCategoryDTO)   
+    const response = await this.service.updateCategory(updateCategoryDTO)
 
     res.status(200).json({
       status: 200,
       message: 'Category updated successfully',
-      data: response // Replace with actual data from your service
+      data: classToPlain(response) 
     })
     return
   }
 
   async deleteCategory(req: Request, res: Response) {
-    this.service.deleteCategory(req.params.id)
+    const { ids } = req.body
+    log('ids', ids)
+    const list = await this.service.deleteCategory(ids)
+
     res.status(200).json({
       status: 200,
-      message: 'Category deleted successfully'
+      message: 'Category deleted successfully',
+      data: classToPlain(list)
+    })
+    return
+  }
+
+  async deleteTemporaryController(req: Request, res: Response) {
+    const { ids } = req.body
+    const response = await this.service.deleteTemporaryCategory(ids)
+    log('response', response)
+    res.status(200).json({
+      status: 200,
+      message: 'Delete category successfully',
+      data: classToPlain(response)
+    })
+    return
+  }
+  async restoreTemporaryController(req: Request, res: Response) {
+    const id = req.params.id
+    const response = await this.service.restoreTemporaryCategory(Number(id))
+    res.status(200).json({
+      status: 200,
+      message: 'Restore category successfully',
+      data: classToPlain(response) 
     })
     return
   }
