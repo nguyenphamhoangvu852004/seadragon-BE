@@ -14,8 +14,10 @@ export enum Status {
 }
 @Entity('accounts')
 export class Accounts extends BaseEntity {
-  @PrimaryGeneratedColumn('uuid')
-  id!: string
+  @PrimaryGeneratedColumn({
+    name: 'id'
+  })
+  id!: number
 
   @Column({ type: 'varchar', nullable: false })
   email!: string
