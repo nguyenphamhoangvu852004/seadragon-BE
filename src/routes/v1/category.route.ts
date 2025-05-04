@@ -16,6 +16,11 @@ const controller = new CategoryController(service)
 router.get('/', controller.getAllCategories.bind(controller))
 router.get('/:id', controller.getCategoryById.bind(controller))
 router.post('/', controller.createCategory.bind(controller))
-router.delete('/:id', controller.deleteCategory.bind(controller))
+router.delete('/', controller.deleteCategory.bind(controller))
 router.put('/:id', controller.updateCategory.bind(controller))
+router.delete(
+  '/temporary',
+  controller.deleteTemporaryController.bind(controller)
+)
+router.put('/temporary/:id',controller.restoreTemporaryController.bind(controller))
 export const categoryRouter = router
