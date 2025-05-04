@@ -21,15 +21,12 @@ router.get(
   controller.getAllDeletedTemporaryProducts.bind(controller)
 )
 router.get('/:id', controller.getProductById.bind(controller))
-router.delete(
-  '/temporary/:id',
-  controller.deleteTemporaryProduct.bind(controller)
-)
+router.delete('/temporary', controller.deleteTemporaryProducts.bind(controller))
 router.put(
   '/temporary/:id',
   controller.restoreTemporaryProduct.bind(controller)
 )
-router.delete('/:id', controller.deleteProduct.bind(controller))
+router.delete('/', controller.deleteProduct.bind(controller))
 router.post(
   '/',
   uploadProducts.single('image'),
