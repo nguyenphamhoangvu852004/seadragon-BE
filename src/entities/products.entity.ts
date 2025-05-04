@@ -1,7 +1,7 @@
 import {
   Column,
   Entity,
-  Index,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn
 } from 'typeorm'
@@ -13,9 +13,6 @@ export class Products extends BaseEntity {
   @PrimaryGeneratedColumn()
   public id!: number
 
-  @Index({
-    unique: true
-  })
   @Column({
     type: 'varchar',
     nullable: false
@@ -29,6 +26,14 @@ export class Products extends BaseEntity {
   public description!: string
 
   @Column({
+    type: 'decimal',
+    nullable: false,
+    precision: 10,
+    scale: 2
+  })
+  public price!: number
+
+  @Column({
     type: 'boolean',
     nullable: false,
     default: false
@@ -38,6 +43,7 @@ export class Products extends BaseEntity {
   @ManyToOne(() => Categories, (category) => category.products, {
     onDelete: 'SET NULL'
   })
+  @JoinColumn({ name: 'categoryId' })
   public category!: Categories
 
   @Column({
@@ -45,5 +51,4 @@ export class Products extends BaseEntity {
     nullable: false
   })
   public image!: string
-
 }
