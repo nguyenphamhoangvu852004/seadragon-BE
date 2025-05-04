@@ -1,27 +1,42 @@
-import { CreateDateColumn, DeleteDateColumn, UpdateDateColumn } from 'typeorm'
+import { Column } from 'typeorm'
+import { Transform } from 'class-transformer'
+import { format, toZonedTime } from 'date-fns-tz'
+
+function formatVNDate(date: Date) {
+  return format(toZonedTime(date, 'Asia/Ho_Chi_Minh'), 'yyyy-MM-dd HH:mm:ss')
+}
 
 export class BaseEntity {
-  @CreateDateColumn({
+  @Column({
     type: 'timestamp',
     name: 'created_at',
     nullable: false,
     comment: 'Creation time'
   })
+  @Transform(({ value }) => (value ? formatVNDate(value) : null), {
+    toPlainOnly: true
+  })
   createdAt!: Date
 
-  @UpdateDateColumn({
+  @Column({
     type: 'timestamp',
     name: 'updated_at',
-    nullable: false,
+    nullable: true,
     comment: 'Update time'
   })
-  updatedAt!: Date
+  @Transform(({ value }) => (value ? formatVNDate(value) : null), {
+    toPlainOnly: true
+  })
+  updatedAt!: Date | null
 
-  @DeleteDateColumn({
+  @Column({
     type: 'timestamp',
     name: 'deleted_at',
-    nullable: false,
+    nullable: true,
     comment: 'Deletion time'
   })
-  deletedAt!: Date
+  @Transform(({ value }) => (value ? formatVNDate(value) : null), {
+    toPlainOnly: true
+  })
+  deletedAt!: Date | null
 }
