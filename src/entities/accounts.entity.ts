@@ -3,11 +3,13 @@ import {
   Entity,
   ManyToMany,
   PrimaryGeneratedColumn,
-  JoinTable
+  JoinTable,
+  OneToMany
 } from 'typeorm'
 import { BaseEntity } from '../shared/baseEntity'
 import { Roles } from './roles.entity'
-export enum Status {
+import { Blogs } from './blog.entity'
+export enum AccountStatus {
   ACTIVE = 'ACTIVE',
   INACTIVE = 'INACTIVE',
   DELETED = 'DELETED'
@@ -30,8 +32,8 @@ export class Accounts extends BaseEntity {
 
   @Column({
     type: 'enum',
-    enum: Status,
-    default: Status.ACTIVE
+    enum: AccountStatus,
+    default: AccountStatus.ACTIVE
   })
   status!: string
 
@@ -48,4 +50,7 @@ export class Accounts extends BaseEntity {
     }
   })
   roles!: Roles[]
+
+  @OneToMany(() => Blogs, (blog) => blog.account)
+  blogs!: Blogs[]
 }
