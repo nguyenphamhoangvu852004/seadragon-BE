@@ -57,6 +57,7 @@ export default class ProductRepoImpl implements IProductRepo {
     return newProduct
   }
   async updateProduct(data: UpdateProductDTO): Promise<any> {
+    //tìm product
     const product = await this.productRepository.findOneBy({
       id: Number(data.id)
     })
@@ -68,11 +69,34 @@ export default class ProductRepoImpl implements IProductRepo {
         id: Number(data.categoryId)
       }
     )
+
+    // xoá trong folder ảnh
+    const fileName = path.basename(product.image as string) // 'image-1745912805477-460172612.jpg'
+    const fullImagePath = path.join(
+      __dirname,
+      '..',
+      '..',
+      '..',
+      '..',
+      'uploads',
+      'products',
+      fileName
+    )
+    console.log('Full image path:', fullImagePath)
+    fs.unlink(fullImagePath, (err) => {
+      if (err) {
+        throw new BadRequestException(err.message)
+      } else {
+        console.log('File deleted successfully')
+      }
+    })
+
     product.title = data.title as string
     product.description = data.description as string
     product.price = data.price as number
     product.category = category as Categories
     product.image = '/uploads/products/' + data.image
+
     await this.productRepository.save(product)
     return product
   }
