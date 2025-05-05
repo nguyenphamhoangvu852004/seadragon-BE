@@ -6,4 +6,8 @@ export default interface IBlogRepo {
   createBlog(data: CreateBlogInputDTO): Promise<any>
   getBlogById(data: any): Promise<any>
   deleteBlogs(ids: number[]): Promise<any>
+  deleteTemporaryBlogs(ids: number[]): Promise<any>
+  restoreBlogs(ids: number[]): Promise<any>
+  getAllTemporaryBlogs(): Promise<any>
+  updateBlog(data: any): Promise<any>
 }
