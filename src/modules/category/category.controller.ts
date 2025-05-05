@@ -16,7 +16,7 @@ export default class CategoryController {
     res.status(200).json({
       status: 200,
       message: 'Get all categories successfully',
-      data: classToPlain(list) 
+      data: classToPlain(list)
     })
     return
   }
@@ -27,7 +27,7 @@ export default class CategoryController {
     res.status(200).json({
       status: 200,
       message: 'Get category by id successfully',
-      data: classToPlain(response) 
+      data: classToPlain(response)
     })
     return
   }
@@ -40,7 +40,7 @@ export default class CategoryController {
     res.status(201).json({
       status: 201,
       message: 'Category created successfully',
-      data: classToPlain(response) 
+      data: classToPlain(response)
     })
     return
   }
@@ -56,7 +56,7 @@ export default class CategoryController {
     res.status(200).json({
       status: 200,
       message: 'Category updated successfully',
-      data: classToPlain(response) 
+      data: classToPlain(response)
     })
     return
   }
@@ -91,8 +91,24 @@ export default class CategoryController {
     res.status(200).json({
       status: 200,
       message: 'Restore category successfully',
-      data: classToPlain(response) 
+      data: classToPlain(response)
     })
     return
+  }
+  async getAllDeletedTemporaryCategories(req: Request, res: Response) {
+    try {
+      const list = await this.service.getAllDeletedTemporaryCategories()
+      res.status(200).json({
+        status: 200,
+        message: 'Get all deleted temporary categories successfully',
+        data: classToPlain(list)
+      })
+      return
+    } catch (error) {
+      res.status(400).json({
+        status: 400,
+        message: error instanceof Error ? error.message : 'An error occurred'
+      })
+    }
   }
 }
