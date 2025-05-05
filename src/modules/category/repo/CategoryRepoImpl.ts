@@ -15,14 +15,33 @@ export default class CategoryRepoIpml implements ICategoryRepo {
     this.categoryRepository = AppDataSource.getRepository(Categories)
     this.productRepository = AppDataSource.getRepository(Products)
   }
+
   async getAllCategories(): Promise<any> {
-    const list = await this.categoryRepository.find()
+    const list = await this.categoryRepository.find({
+      where: {
+        isDeleted: false
+      },
+      withDeleted: false
+    })
     log('list', list)
     return list
   }
+
   async getCategoryById(id: string): Promise<any> {
     return await this.categoryRepository.findOneBy({ id: Number(id) })
   }
+
+  async getAllDeletedTemporaryCategories(): Promise<Categories[]> {
+    const list = await this.categoryRepository.find({
+      where: {
+        isDeleted: true
+      },
+      withDeleted: true
+    })
+    log('list category da xoa tam', list)
+    return list
+  }
+
   async createCategory(data: CreateCategoryDTO): Promise<any> {
     try {
       const newCategory = this.categoryRepository.create({
