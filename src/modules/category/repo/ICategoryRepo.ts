@@ -4,6 +4,7 @@ import { CreateCategoryDTO } from '../dto/create.category.dto'
 export default interface ICategoryRepo {
   getAllCategories(): Promise<any>
   getCategoryById(id: string): Promise<any>
+  getAllDeletedTemporaryCategories(): Promise<any>
   createCategory(data: CreateCategoryDTO): Promise<any>
   updateCategory(data: any): Promise<any>
   deleteCategory(ids: number[]): Promise<any>
