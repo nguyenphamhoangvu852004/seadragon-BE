@@ -2,6 +2,7 @@
 export interface ICategoryService {
   getAllCategories(): Promise<any>
   getCategoryById(id: string): Promise<any>
+  getAllDeletedTemporaryCategories(): Promise<any>
   createCategory(data: any): Promise<any>
   updateCategory(data: any): Promise<any>
   deleteCategory(ids: number[]): Promise<any>
