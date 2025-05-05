@@ -6,6 +6,10 @@ import { log } from 'console'
 import { Accounts } from '../../../entities/accounts.entity'
 import { CreateBlogInputDTO } from '../dto/create.blog.dto'
 import { NotFoundException } from '../../../shared/NotFound.exeception'
+import { UpdateBlogInputDto } from '../dto/update.blog.dto'
+import path from 'path'
+import fs from 'fs'
+import { BadRequestException } from '../../../shared/BadRequest.exeception'
 
 export default class BlogRepoImpl implements IBlogRepo {
   blogRepository: Repository<Blogs>
@@ -46,6 +50,10 @@ export default class BlogRepoImpl implements IBlogRepo {
 
   async getAllBlog(): Promise<Blogs[]> {
     const list = await this.blogRepository.find({
+      where: {
+        isDeleted: false
+      },
+      withDeleted: false,
       relations: {
         account: true
       }
@@ -79,11 +87,121 @@ export default class BlogRepoImpl implements IBlogRepo {
         withDeleted: true
       })
       if (blog) {
+        const fileName = path.basename(blog.image as string) // 'image-1745912805477-460172612.jpg'
+        const fullImagePath = path.join(
+          __dirname,
+          '..',
+          '..',
+          '..',
+          '..',
+          'uploads',
+          'blogs',
+          fileName
+        )
+        console.log('Full image path:', fullImagePath)
+        fs.unlink(fullImagePath, (err) => {
+          if (err) {
+            throw new BadRequestException(err.message)
+          } else {
+            console.log('File deleted successfully')
+          }
+        })
         list.push(blog)
       }
     }
 
+    // xoa tat ca cac hinh anh trong mang products
     await this.blogRepository.remove(list)
     return list
+  }
+
+  async deleteTemporaryBlogs(ids: number[]): Promise<Blogs[]> {
+    log('ids', ids)
+    const listBlogs: Blogs[] = []
+    for (const i of ids) {
+      const blog = await this.blogRepository.findOneBy({ id: Number(i) })
+      if (!blog) {
+        throw new Error('Product not found')
+      }
+      blog.isDeleted = true
+      blog.deletedAt = new Date()
+      listBlogs.push(blog)
+    }
+    await this.blogRepository.save(listBlogs)
+    log(listBlogs)
+    return listBlogs
+  }
+
+  async restoreBlogs(ids: number[]): Promise<Blogs[]> {
+    const listBlogs: Blogs[] = []
+    for (const id in ids) {
+      const blog: Blogs | null = await this.blogRepository.findOne({
+        where: {
+          id: Number(id),
+          isDeleted: true
+        },
+        withDeleted: true
+      })
+      if (blog) {
+        blog.deletedAt = null
+        blog.isDeleted = false
+        listBlogs.push(blog)
+      }
+    }
+    await this.blogRepository.save(listBlogs)
+    return listBlogs
+  }
+
+  async getAllTemporaryBlogs(): Promise<Blogs[]> {
+    const list: Blogs[] = await this.blogRepository.find({
+      where: {
+        isDeleted: true
+      },
+      withDeleted: true,
+      relations: {
+        account: true
+      }
+    })
+    return list
+  }
+
+  async updateBlog(data: UpdateBlogInputDto): Promise<Blogs> {
+    const { id, title, body, image } = data
+    const blog: Blogs | null = await this.blogRepository.findOne({
+      where: {
+        id: Number(id)
+      }
+    })
+    if (!blog) {
+      throw new NotFoundException('Blog not found')
+    }
+
+    // xoá trong folder ảnh
+    const fileName = path.basename(blog.image as string) // 'image-1745912805477-460172612.jpg'
+    const fullImagePath = path.join(
+      __dirname,
+      '..',
+      '..',
+      '..',
+      '..',
+      'uploads',
+      'blogs',
+      fileName
+    )
+    console.log('Full image path:', fullImagePath)
+    fs.unlink(fullImagePath, (err) => {
+      if (err) {
+        throw new BadRequestException(err.message)
+      } else {
+        console.log('File deleted successfully')
+      }
+    })
+    blog.title = title
+    blog.body = body
+    blog.image = image
+    blog.updatedAt = new Date()
+
+    await this.blogRepository.save(blog)
+    return blog
   }
 }
