@@ -9,6 +9,8 @@ import { AccountDTO, GetBlogOutputDTO } from '../dto/get.blog.dto'
 import IBlogRepo from '../repo/IBlogRepo'
 import { IBlogService } from './IBlogService'
 import { NotFoundException } from '../../../shared/NotFound.exeception'
+import { GetBlogTemporaryOutputDTO } from '../dto/get.blog.temporary.dto'
+import { UpdateBlogInputDto } from '../dto/update.blog.dto'
 
 export default class BlogServiceImpl implements IBlogService {
   blogRepository: IBlogRepo
@@ -56,8 +58,36 @@ export default class BlogServiceImpl implements IBlogService {
     })
     return listOutDTO
   }
-  getAllDeletedTemporaryBlogs(): Promise<any> {
-    throw new Error('Method not implemented.')
+  async getAllDeletedTemporaryBlogs(): Promise<GetBlogOutputDTO[]> {
+    try {
+      const list: Blogs[] = await this.blogRepository.getAllTemporaryBlogs()
+      const listDto: GetBlogOutputDTO[] = []
+      list.forEach((item) => {
+        const outDTO: GetBlogTemporaryOutputDTO =
+          new GetBlogTemporaryOutputDTO()
+        outDTO.id = Number(item.id)
+        outDTO.title = item.title
+        outDTO.body = item.title
+        outDTO.likeAmount = item.likeAmount
+        outDTO.viewAmount = item.viewAmount
+        outDTO.image = item.image
+        outDTO.isDeteled = item.isDeleted
+        outDTO.createdAt = item.createdAt
+        outDTO.deletedAt = item.deletedAt!
+        const accountDto = new AccountDTO()
+        accountDto.id = String(item.account.id)
+        accountDto.username = item.account.username
+        accountDto.email = item.account.email
+        outDTO.account = accountDto
+        listDto.push(outDTO)
+      })
+      return listDto
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(error.message)
+      }
+      throw new Error('An unknown error occurred')
+    }
   }
   async getBlogById(id: string): Promise<GetBlogOutputDTO> {
     try {
@@ -85,20 +115,50 @@ export default class BlogServiceImpl implements IBlogService {
       throw new Error('An unknown error occurred')
     }
   }
-  updateBlog(data: any): Promise<any> {
-    throw new Error('Method not implemented.')
-  }
-  deleteTemporaryBlogs(ids: number[]): Promise<any> {
-    throw new Error('Method not implemented.')
-  }
-  restoreTemporaryBlog(id: string): Promise<any> {
-    throw new Error('Method not implemented.')
-  }
-  async deleteBlogs(ids: number[]): Promise<Blogs[]> {
+
+  async updateBlog(data: UpdateBlogInputDto): Promise<Blogs> {
     try {
-      const res = await this.blogRepository.deleteBlogs(ids)
+      const res: Blogs = await this.blogRepository.updateBlog(data)
       return res
     } catch (error) {
+      if (error instanceof Error) {
+        throw new Error("Error while update")
+      }
+      throw new Error('An unknown error occurred')
+    }
+  }
+
+  async deleteTemporaryBlogs(ids: number[]): Promise<Blogs[]> {
+    try {
+      const response: Blogs[] =
+        await this.blogRepository.deleteTemporaryBlogs(ids)
+      return response
+    } catch (error) {
+      log(error)
+      throw new Error('Bad Request')
+    }
+  }
+
+  async restoreTemporaryBlogs(ids: number[]): Promise<Blogs[]> {
+    try {
+      const list = await this.blogRepository.restoreBlogs(ids)
+      return list
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(error.message)
+      }
+      throw new Error('Something went wrong')
+    }
+  }
+
+  async deleteBlogs(ids: number[]): Promise<Blogs[]> {
+    try {
+      const res: Blogs[] = await this.blogRepository.deleteBlogs(ids)
+      return res
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(error.message)
+      }
       throw new Error('An unknown error occurred')
     }
   }
