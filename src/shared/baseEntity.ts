@@ -2,7 +2,7 @@ import { Column } from 'typeorm'
 import { Transform } from 'class-transformer'
 import { format, toZonedTime } from 'date-fns-tz'
 
-function formatVNDate(date: Date) {
+export function formatVNDate(date: Date) {
   return format(toZonedTime(date, 'Asia/Ho_Chi_Minh'), 'yyyy-MM-dd HH:mm:ss')
 }
 
