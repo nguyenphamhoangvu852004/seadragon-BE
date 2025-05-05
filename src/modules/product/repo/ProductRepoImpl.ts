@@ -51,7 +51,7 @@ export default class ProductRepoImpl implements IProductRepo {
       },
       image: '/uploads/products/' + data.image,
       isDeleted: false,
-      createdAt: new Date(),
+      createdAt: new Date()
     })
     await this.productRepository.save(newProduct)
     return newProduct
@@ -115,7 +115,7 @@ export default class ProductRepoImpl implements IProductRepo {
     log('product  ', product)
     return product
   }
-  async deleteProducts(ids: number[]): Promise<any> {
+  async deleteProducts(ids: number[]): Promise<Products[]> {
     // tao mang luu tru cac san pham
     const products: Products[] = []
 
@@ -131,6 +131,7 @@ export default class ProductRepoImpl implements IProductRepo {
       if (!product) {
         throw new NotFoundException('Bad Request')
       }
+      log(product)
       // them vao mang products
       products.push(product)
 
