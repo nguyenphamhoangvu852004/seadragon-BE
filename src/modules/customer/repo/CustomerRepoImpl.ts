@@ -12,7 +12,12 @@ export default class CustomerRepoImpl implements ICustomerRepo {
     this.customerRepository = AppDataSource.getRepository(Customers)
   }
   async getAllCustomer(): Promise<Customers[]> {
-    const list = this.customerRepository.find()
+    const list = this.customerRepository.find({
+      where: {
+        isDeleted: false
+      },
+      withDeleted: false
+    })
     return list
   }
 
@@ -71,7 +76,8 @@ export default class CustomerRepoImpl implements ICustomerRepo {
   async restoreTemporaryCustomers(id: number): Promise<Customers> {
     const customer = await this.customerRepository.findOne({
       where: {
-        id: Number(id)
+        id: Number(id),
+        isDeleted: true
       },
       withDeleted: true
     })
