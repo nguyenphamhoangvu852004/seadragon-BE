@@ -13,7 +13,6 @@ export default class CustomerServiceImpl implements ICustomerService {
     this.repo = repo
   }
 
-
   async getList(): Promise<Customers[]> {
     try {
       const list = await this.repo.getAllCustomer()
@@ -22,6 +21,11 @@ export default class CustomerServiceImpl implements ICustomerService {
       const list: Customers[] = []
       return list
     }
+  }
+
+  async getAllDeletedTemporaryCustomers(): Promise<Customers[]> {
+    const list = await this.repo.getListDeleteTeporaryCustomers()
+    return list
   }
 
   async createCustomer(data: CreateCustomerDto): Promise<Customers> {
@@ -51,9 +55,13 @@ export default class CustomerServiceImpl implements ICustomerService {
     }
   }
 
-  async restoreTemporaryService(id: number): Promise<Customers> {
-    const customer = await this.repo.restoreTemporaryCustomers(id)
-    return customer
+  async restoreTemporaryCustomer(id: number): Promise<Customers> {
+    try {
+      const customer = await this.repo.restoreTemporaryCustomers(id)
+      return customer
+    } catch (error: Error | any) {
+      throw new Error('Bad Request')
+    }
   }
 
   async getDetailCustomer(id: number): Promise<Customers> {
