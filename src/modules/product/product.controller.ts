@@ -4,6 +4,7 @@ import { UpdateProductDTO } from './dto/update.product.dto'
 import { IProductService } from './service/IProductService'
 import { Request, Response } from 'express'
 import { BadRequestException } from '../../shared/BadRequest.exeception'
+import { Products } from '../../entities/products.entity'
 export default class ProductController {
   productService: IProductService
   constructor(productService: IProductService) {
@@ -30,7 +31,7 @@ export default class ProductController {
     res.status(200).json({
       status: 200,
       message: 'Get all deleted temporary products successfully',
-      data: classToPlain(products) 
+      data: classToPlain(products)
     })
     return
   }
@@ -41,7 +42,7 @@ export default class ProductController {
       res.status(200).json({
         status: 200,
         message: 'Get product by id successfully',
-        data: classToPlain(product) 
+        data: classToPlain(product)
       })
       return
     } catch (error) {
@@ -67,7 +68,7 @@ export default class ProductController {
     res.status(200).json({
       status: 200,
       message: 'Delete product successfully',
-      data: classToPlain(product) 
+      data: classToPlain(product)
     })
     return
   }
@@ -86,7 +87,7 @@ export default class ProductController {
     try {
       const { ids } = req.body
       console.log('ids', ids)
-      const products = await this.productService.deleteProducts(ids)
+      const products: Products[] = await this.productService.deleteProducts(ids)
       res.status(200).json({
         status: 200,
         message: 'Delete products successfully',
@@ -116,7 +117,7 @@ export default class ProductController {
     res.status(201).json({
       status: 201,
       message: 'Create product successfully',
-      data: classToPlain(product) 
+      data: classToPlain(product)
     })
     return
   }
