@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { Products } from '../../../entities/products.entity'
 import { BadRequestException } from '../../../shared/BadRequest.exeception'
 import { CreateProductDTO } from '../dto/create.product.dto'
 import { UpdateProductDTO } from '../dto/update.product.dto'
@@ -41,9 +42,9 @@ export default class ProductServiceImpl implements IProductService {
     const product = await this.productRepository.restoreTemporaryProduct(id)
     return product
   }
-  async deleteProducts(ids: number[]): Promise<any> {
+  async deleteProducts(ids: number[]): Promise<Products[]> {
     try {
-      const product = await this.productRepository.deleteProducts(ids)
+      const product:Products[] = await this.productRepository.deleteProducts(ids)
       return product
     } catch (error: Error | any) {
       throw new Error(error.message)
