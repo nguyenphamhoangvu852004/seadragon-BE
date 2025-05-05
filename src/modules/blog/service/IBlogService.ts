@@ -8,6 +8,6 @@ export interface IBlogService {
   createBlog(data: CreateBlogInputDTO): Promise<any>
   updateBlog(data: any): Promise<any>
   deleteTemporaryBlogs(ids: number[]): Promise<any>
-  restoreTemporaryBlog(id: string): Promise<any>
+  restoreTemporaryBlogs(ids: number[]): Promise<any>
   deleteBlogs(ids: number[]): Promise<any>
 }
