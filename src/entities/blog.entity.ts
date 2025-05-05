@@ -42,17 +42,20 @@ export class Blogs extends BaseEntity {
   body!: string
 
   @Column({
-    type: 'enum',
-    enum: BlogStatus
+    type: 'boolean',
+    nullable: false,
+    default: false
   })
-  status!: string
+  public isDeleted!: boolean
 
-  setDefaultStatus() {
-    this.status = BlogStatus.ACTIVE
-  }
+
+  /**
+   * Set the viewAmount of the blog to 0
+   */
   setDefaultViewAmount() {
     this.viewAmount = 0
   }
+
   setDefaultLikeAmount() {
     this.likeAmount = 0
   }
