@@ -16,6 +16,11 @@ export default class CategoryServiceImpl implements ICategoryService {
   async getCategoryById(id: string): Promise<any> {
     return await this.repo.getCategoryById(id)
   }
+
+  async getAllDeletedTemporaryCategories(): Promise<any> {
+    return await this.repo.getAllDeletedTemporaryCategories()
+  }
+
   async createCategory(data: CreateCategoryDTO): Promise<any> {
     const res = await this.repo.createCategory(data)
     return res
