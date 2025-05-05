@@ -18,6 +18,15 @@ export default class CustomerController {
     })
     return
   }
+  async getAllDeletedTemporaryCustomers(req: Request, res: Response) {
+    const list = await this.customerService.getAllDeletedTemporaryCustomers()
+    res.status(200).json({
+      status: 200,
+      message: 'Get List Customer Success',
+      data: classToPlain(list)
+    })
+    return
+  }
 
   async createCustomer(req: Request, res: Response) {
     try {
@@ -64,18 +73,6 @@ export default class CustomerController {
       return
     }
   }
-  async restoreTemporaryCustomers(req: Request, res: Response) {
-    const id = req.params.id
-    const product = await this.customerService.restoreTemporaryService(
-      Number(id)
-    )
-    res.status(200).json({
-      status: 200,
-      message: 'Restore product successfully',
-      data: classToPlain(product)
-    })
-    return
-  }
   async getDetailCustomers(req: Request, res: Response) {
     try {
       const id = req.params.id
@@ -111,6 +108,26 @@ export default class CustomerController {
         message: 'Deleted success',
         data: classToPlain(list)
       })
+    } catch (error) {
+      res.status(400).json({
+        status: 400,
+        message: error instanceof Error ? error.message : 'An error occurred'
+      })
+      return
+    }
+  }
+  async restoreTemporaryCustomer(req: Request, res: Response) {
+    try {
+      const id = req.params.id
+      const product = await this.customerService.restoreTemporaryCustomer(
+        Number(id)
+      )
+      res.status(200).json({
+        status: 200,
+        message: 'Restore product successfully',
+        data: classToPlain(product)
+      })
+      return
     } catch (error) {
       res.status(400).json({
         status: 400,
