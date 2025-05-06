@@ -1,10 +1,7 @@
 export class CreateProductDTO {
-  name!: string
+  title!: string
   description!: string
   price!: number
-  isDeleted!: boolean
   categoryId!: number
-  setIsDeleted() {
-    this.isDeleted = false
-  }
+  image!: string
 }

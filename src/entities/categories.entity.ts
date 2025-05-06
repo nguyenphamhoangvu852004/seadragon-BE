@@ -4,9 +4,7 @@ import { Products } from './products.entity'
 
 @Entity('categories')
 export class Categories extends BaseEntity {
-  @PrimaryGeneratedColumn({
-    type: 'int'
-  })
+  @PrimaryGeneratedColumn()
   public id!: number
 
   @Column({
@@ -15,6 +13,13 @@ export class Categories extends BaseEntity {
     unique: true
   })
   public name!: string
+
+  @Column({
+    type: 'boolean',
+    nullable: false,
+    default: false
+  })
+  public isDeleted!: boolean
 
   @OneToMany(() => Products, (product) => product.category)
   public products!: Products[]

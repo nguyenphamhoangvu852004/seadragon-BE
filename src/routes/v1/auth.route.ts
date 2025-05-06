@@ -1,35 +1,24 @@
-import dotenv from 'dotenv'
 import { Router } from 'express'
-import { LoginController } from '../../modules/auth/controllers/LoginController'
-import { RegisterController } from '../../modules/auth/controllers/RegisterController'
-import { LoginDatabase } from '../../modules/auth/databases/LoginDatabase'
-import { RegisterDatabase } from '../../modules/auth/databases/RegisterDatabase'
-import { LoginPresenter } from '../../modules/auth/presenters/LoginPresenter'
-import { RegisterPresenter } from '../../modules/auth/presenters/RegisterPresenter'
-import { LoginService } from '../../modules/auth/userServices/LoginService'
-import { RegisterService } from '../../modules/auth/userServices/RegisterService'
-dotenv.config()
-
+import AccountRepoImpl from '../../modules/account/repo/AccountRepoImpl'
+import AccountServiceImpl from '../../modules/account/service/AccountServiceImpl'
+import AccountController from '../../modules/account/account.controller'
+import { verifyToken } from '../../middleware/verifyToken'
+import { verifyRole } from '../../middleware/verifyRole'
+import { RoleName } from '../../entities/roles.entity'
 const router = Router()
 
-const loginPresenter = new LoginPresenter()
-const loginDatabase = new LoginDatabase()
-const loginInputBoundary = new LoginService(loginPresenter, loginDatabase)
-const loginController = new LoginController(loginInputBoundary, loginPresenter)
-router.post('/login', loginController.execute)
+const repo = new AccountRepoImpl()
+const service = new AccountServiceImpl(repo)
+const controller = new AccountController(service)
 
-router.post('/refresh', loginController.doRefreshToken)
-
-const registerPresenter = new RegisterPresenter()
-const registerDatabase = new RegisterDatabase()
-const registerInputBoundary = new RegisterService(
-  registerDatabase,
-  registerPresenter
+const ROLENAME = [RoleName.ADMIN]
+//auth
+router.post(
+  '/register',
+  verifyToken(),
+  verifyRole(ROLENAME),
+  controller.createAccount.bind(controller)
 )
-const registerController = new RegisterController(
-  registerInputBoundary,
-  registerPresenter
-)
-router.post('/register', registerController.execute)
+router.post('/login', controller.login.bind(controller))
 
 export const authRouter = router
