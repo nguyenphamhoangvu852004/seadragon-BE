@@ -39,4 +39,8 @@ export class BaseEntity {
     toPlainOnly: true
   })
   deletedAt!: Date | null
+
+  constructor(data?: Partial<BaseEntity>) {
+    Object.assign(this, data)
+  }
 }
