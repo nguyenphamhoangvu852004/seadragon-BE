@@ -9,7 +9,7 @@ const router = Router()
 //Update Category
 //Delete Category
 //Get Category by ID
-const repo = new CustomerRepoImpl()
+export const repo = new CustomerRepoImpl()
 const service = new CustomerServiceImpl(repo)
 const controller = new CustomerController(service)
 
