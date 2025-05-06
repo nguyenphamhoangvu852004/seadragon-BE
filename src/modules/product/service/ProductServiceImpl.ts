@@ -11,11 +11,11 @@ export default class ProductServiceImpl implements IProductService {
   constructor(productRepository: IProductRepo) {
     this.productRepository = productRepository
   }
-  async getAllProduct(categoryId: string): Promise<any> {
+  async getAllProduct(categoryId: string): Promise<Products[]> {
     const list = this.productRepository.getAllProducts(categoryId)
     return list
   }
-  async getProductById(id: string): Promise<any> {
+  async getProductById(id: string): Promise<Products> {
     try {
       const product = this.productRepository.getProductById(id)
       return product
@@ -26,31 +26,34 @@ export default class ProductServiceImpl implements IProductService {
       throw new BadRequestException('An unknown error occurred')
     }
   }
-  async createProduct(data: CreateProductDTO): Promise<any> {
+  async createProduct(data: CreateProductDTO): Promise<Products> {
     const newProduct = await this.productRepository.createProduct(data)
     return newProduct
   }
-  async updateProduct(data: UpdateProductDTO): Promise<any> {
+  async updateProduct(data: UpdateProductDTO): Promise<Products> {
     const product = await this.productRepository.updateProduct(data)
     return product
   }
-  async deleteTemporaryProducts(ids: number[]): Promise<any> {
+  async deleteTemporaryProducts(ids: number[]): Promise<Products[]> {
     const product = await this.productRepository.deleteTemporaryProducts(ids)
     return product
   }
-  async restoreTemporaryProduct(id: string): Promise<any> {
+  async restoreTemporaryProduct(id: string): Promise<Products> {
     const product = await this.productRepository.restoreTemporaryProduct(id)
     return product
   }
   async deleteProducts(ids: number[]): Promise<Products[]> {
     try {
-      const product:Products[] = await this.productRepository.deleteProducts(ids)
+      const product: Products[] =
+        await this.productRepository.deleteProducts(ids)
       return product
     } catch (error: Error | any) {
       throw new Error(error.message)
     }
   }
-  async getAllDeletedTemporaryProducts(categoryId: string): Promise<any> {
+  async getAllDeletedTemporaryProducts(
+    categoryId: string
+  ): Promise<Products[]> {
     const list =
       await this.productRepository.getAllDeletedTemporaryProducts(categoryId)
     return list
