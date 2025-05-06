@@ -11,7 +11,7 @@ export default class AccountController {
     this.service = service
   }
 
-  async createAccount(req: Request, res: Response): Promise<any> {
+  async createAccount(req: Request, res: Response) {
     try {
       const { username, email, password, confirmPassword } = req.body
       const dto = new CreateAccountDTO()
@@ -37,23 +37,32 @@ export default class AccountController {
     }
   }
 
-  async login(req: Request, res: Response): Promise<any> {
-    const { email, password } = req.body
-    const dto = new LoginAccountDTO()
-    dto.email = email
-    dto.password = password
+  async login(req: Request, res: Response) {
+    try {
+      const { email, password } = req.body
+      const dto = new LoginAccountDTO()
+      dto.email = email
+      dto.password = password
 
-    const respone = await this.service.login(dto)
-    res.status(200).json({
-      status: 200,
-      message: 'Login successfully',
-      data: {
-        token: respone
-      }
-    })
-    return
+      const respone = await this.service.login(dto)
+      res.status(200).json({
+        status: 200,
+        message: 'Login successfully',
+        data: {
+          token: respone
+        }
+      })
+      return
+    } catch (error: Error | any) {
+      res.status(400).json({
+        status: 400,
+        message: error ? error.message : 'An error occurred',
+        data: {}
+      })
+      return
+    }
   }
-  async getAccount(req: Request, res: Response): Promise<any> {
+  async getAccount(req: Request, res: Response) {
     try {
       const { id, email } = req.query
       const findDTO = new FindAccountDTO()
@@ -69,7 +78,7 @@ export default class AccountController {
     } catch (error: Error | any) {
       res.status(400).json({
         status: 400,
-        message: error instanceof Error ? error.message : 'An error occurred',
+        message: error ? error.message : 'An error occurred',
         data: {}
       })
       return
@@ -77,13 +86,22 @@ export default class AccountController {
   }
 
   async getList(req: Request, res: Response) {
-    const list = this.service.getListAccount()
-    res.status(200).json({
-      status: 200,
-      message: 'Get account list',
-      data: classToPlain(list)
-    })
-    return
+    try {
+      const list = await this.service.getListAccount()
+      res.status(200).json({
+        status: 200,
+        message: 'Get account list',
+        data: classToPlain(list)
+      })
+      return
+    } catch (error: Error | any) {
+      res.status(400).json({
+        status: 400,
+        message: error ? error.message : 'An error occurred',
+        data: {}
+      })
+      return
+    }
   }
   async setRolesToAccount(req: Request, res: Response) {
     try {
@@ -95,10 +113,29 @@ export default class AccountController {
         data: classToPlain(account)
       })
       return
-    } catch (error) {
+    } catch (error: Error | any) {
       res.status(400).json({
         status: 400,
-        message: error instanceof Error ? error.message : 'An error occurred',
+        message: error ? error.message : 'An error occurred',
+        data: {}
+      })
+      return
+    }
+  }
+  async deleteAccounts(req: Request, res: Response) {
+    try {
+      const { ids } = req.body
+      const list = await this.service.deleteAccounts(ids)
+      res.status(200).json({
+        status: 200,
+        message: 'Deleted success',
+        data: classToPlain(list)
+      })
+      return
+    } catch (error: Error | any) {
+      res.status(400).json({
+        status: 400,
+        message: error ? error.message : 'An error occurred',
         data: {}
       })
       return

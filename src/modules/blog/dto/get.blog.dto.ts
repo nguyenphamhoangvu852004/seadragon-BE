@@ -19,4 +19,5 @@ export class AccountDTO {
   id!: string
   username!: string
   email!: string
+
 }

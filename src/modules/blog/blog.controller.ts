@@ -37,13 +37,21 @@ export default class BlogController {
   }
 
   async getAllBlog(req: Request, res: Response) {
-    const response = await this.blogService.getAllBlog()
-    res.status(200).json({
-      status: 200,
-      message: 'Get all blog successfully',
-      data: classToPlain(response)
-    })
-    return
+    try {
+      const response = await this.blogService.getAllBlog()
+      res.status(200).json({
+        status: 200,
+        message: 'Get all blog successfully',
+        data: classToPlain(response)
+      })
+      return
+    } catch (error) {
+      res.status(400).json({
+        status: 400,
+        message: error instanceof Error ? error.message : 'An error occurred'
+      })
+      return
+    }
   }
   async getDetailBlog(req: Request, res: Response) {
     try {
