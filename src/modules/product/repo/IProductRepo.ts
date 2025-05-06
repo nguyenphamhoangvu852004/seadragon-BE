@@ -1,13 +1,14 @@
+import { Products } from '../../../entities/products.entity'
 import { CreateProductDTO } from '../dto/create.product.dto'
+import { UpdateProductDTO } from '../dto/update.product.dto'
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export default interface IProductRepo {
-  getAllProducts(categoryId: string): Promise<any>
-  getAllDeletedTemporaryProducts(categoryId: string): Promise<any>
-  getProductById(id: string): Promise<any>
-  createProduct(data: CreateProductDTO): Promise<any>
-  updateProduct(data: any): Promise<any>
-  deleteTemporaryProducts(id: number[]): Promise<any>
-  restoreTemporaryProduct(id: string): Promise<any>
-  deleteProducts(ids: number[]): Promise<any>
+  getAllProducts(categoryId: string): Promise<Products[]>
+  getAllDeletedTemporaryProducts(categoryId: string): Promise<Products[]>
+  getProductById(id: string): Promise<Products>
+  createProduct(data: CreateProductDTO): Promise<Products>
+  updateProduct(data: UpdateProductDTO): Promise<Products>
+  deleteTemporaryProducts(id: number[]): Promise<Products[]>
+  restoreTemporaryProduct(id: string): Promise<Products>
+  deleteProducts(ids: number[]): Promise<Products[]>
 }
