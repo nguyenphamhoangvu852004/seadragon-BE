@@ -4,11 +4,6 @@ import CustomerServiceImpl from '../../modules/customer/service/CustomerServiceI
 import CustomerController from '../../modules/customer/customer.controller'
 const router = Router()
 
-//Get Category
-//Create Category
-//Update Category
-//Delete Category
-//Get Category by ID
 export const repo = new CustomerRepoImpl()
 const service = new CustomerServiceImpl(repo)
 const controller = new CustomerController(service)
