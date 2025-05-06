@@ -76,7 +76,7 @@ export default class AccountController {
     }
   }
 
-  async getList(req: Request, res: Response): Promise<any> {
+  async getList(req: Request, res: Response) {
     const list = this.service.getListAccount()
     res.status(200).json({
       status: 200,
@@ -84,5 +84,24 @@ export default class AccountController {
       data: classToPlain(list)
     })
     return
+  }
+  async setRolesToAccount(req: Request, res: Response) {
+    try {
+      const { userId, roles } = req.body
+      const account = await this.service.setRolesToAccount(userId, roles)
+      res.status(200).json({
+        status: 200,
+        message: 'Set roles to account successfully',
+        data: classToPlain(account)
+      })
+      return
+    } catch (error) {
+      res.status(400).json({
+        status: 400,
+        message: error instanceof Error ? error.message : 'An error occurred',
+        data: {}
+      })
+      return
+    }
   }
 }
