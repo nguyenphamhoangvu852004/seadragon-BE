@@ -19,7 +19,7 @@ export default class ProductRepoImpl implements IProductRepo {
     this.categoryRepository = AppDataSource.getRepository(Categories)
   }
 
-  async getAllProducts(categoryId: string): Promise<any> {
+  async getAllProducts(categoryId: string): Promise<Products[]> {
     const list = await this.productRepository.find({
       where: {
         category: {
@@ -41,7 +41,7 @@ export default class ProductRepoImpl implements IProductRepo {
     }
     return product
   }
-  async createProduct(data: CreateProductDTO): Promise<any> {
+  async createProduct(data: CreateProductDTO): Promise<Products> {
     const newProduct = this.productRepository.create({
       title: data.title,
       price: data.price,
@@ -56,7 +56,7 @@ export default class ProductRepoImpl implements IProductRepo {
     await this.productRepository.save(newProduct)
     return newProduct
   }
-  async updateProduct(data: UpdateProductDTO): Promise<any> {
+  async updateProduct(data: UpdateProductDTO): Promise<Products> {
     //tìm product
     const product = await this.productRepository.findOneBy({
       id: Number(data.id)
@@ -122,7 +122,7 @@ export default class ProductRepoImpl implements IProductRepo {
     await this.productRepository.save(listProduct)
     return listProduct
   }
-  async restoreTemporaryProduct(id: string): Promise<any> {
+  async restoreTemporaryProduct(id: string): Promise<Products> {
     const product = await this.productRepository.findOne({
       where: {
         id: Number(id)
@@ -218,7 +218,9 @@ export default class ProductRepoImpl implements IProductRepo {
     return products
   }
 
-  async getAllDeletedTemporaryProducts(categoryId: string): Promise<any> {
+  async getAllDeletedTemporaryProducts(
+    categoryId: string
+  ): Promise<Products[]> {
     const list = await this.productRepository.find({
       where: {
         isDeleted: true,
