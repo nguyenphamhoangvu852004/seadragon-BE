@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 import { BaseEntity } from '../shared/baseEntity'
+import { Orders } from './orders.entity'
 
 @Entity('customers')
 export class Customers extends BaseEntity {
@@ -36,4 +37,7 @@ export class Customers extends BaseEntity {
     default: false
   })
   public isDeleted!: boolean
+
+  @OneToMany(() => Orders, (order) => order.customer)
+  public orders!: Orders[]
 }
