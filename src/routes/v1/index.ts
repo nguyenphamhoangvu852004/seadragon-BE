@@ -9,6 +9,7 @@ import { orderRouter } from './order.route'
 import { verifyToken } from '../../middleware/verifyToken'
 import { verifyRole } from '../../middleware/verifyRole'
 import { RoleName } from '../../utils/enum'
+import { emailRouter } from './email.route'
 const router = Router()
 
 const ROLENAME_ROUTE_ACCOUNT = [RoleName.ADMIN]
@@ -26,4 +27,5 @@ router.use(
 router.use('/customers', customerRouter)
 router.use('/blogs', blogRouter)
 router.use('/orders', orderRouter)
+router.use('/email', emailRouter)
 export const v1Router = router

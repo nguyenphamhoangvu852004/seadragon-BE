@@ -12,16 +12,26 @@ export default class ProductController {
   }
 
   async getAllProducts(req: Request, res: Response) {
-    const categoryId = req.query.categoryId
-    const products = await this.productService.getAllProduct(
-      categoryId as string
-    )
-    res.status(200).json({
-      status: 200,
-      message: 'Get all products successfully',
-      data: classToPlain(products)
-    })
-    return
+    try {
+      const categoryId = req.query.categoryId
+      const products = await this.productService.getAllProduct(
+        categoryId as string
+      )
+      res.status(200).json({
+        status: 200,
+        message: 'Get all products successfully',
+        data: classToPlain(products)
+      })
+      return
+    } catch (error) {
+      console.log(error)
+      res.status(200).json({
+        status: 200,
+        message: 'Empty list',
+        data: []
+      })
+      return
+    }
   }
   async getAllDeletedTemporaryProducts(req: Request, res: Response) {
     const categoryId = req.query.categoryId
@@ -73,14 +83,23 @@ export default class ProductController {
     return
   }
   async restoreTemporaryProduct(req: Request, res: Response) {
-    const id = req.params.id
-    const product = await this.productService.restoreTemporaryProduct(id)
-    res.status(200).json({
-      status: 200,
-      message: 'Restore product successfully',
-      data: classToPlain(product)
-    })
-    return
+    try {
+      const id = req.params.id
+      const product = await this.productService.restoreTemporaryProduct(id)
+      res.status(200).json({
+        status: 200,
+        message: 'Restore product successfully',
+        data: classToPlain(product)
+      })
+      return
+    } catch (error) {
+      res.status(400).json({
+        status: 400,
+        message: 'Restore Failed',
+        data: error
+      })
+      return
+    }
   }
 
   async deleteProduct(req: Request, res: Response) {
@@ -104,42 +123,60 @@ export default class ProductController {
   }
 
   async createProduct(req: Request, res: Response) {
-    const { title, description, price, categoryId } = req.body
-    const image = req.file?.filename as string
-    const newProduct = new CreateProductDTO()
-    newProduct.title = title
-    newProduct.description = description
-    newProduct.price = price as number
-    newProduct.categoryId = categoryId as number
-    newProduct.image = image
-    console.log('newProduct', newProduct)
-    const product = await this.productService.createProduct(newProduct)
-    res.status(201).json({
-      status: 201,
-      message: 'Create product successfully',
-      data: classToPlain(product)
-    })
-    return
+    try {
+      const { title, description, price, categoryId } = req.body
+      const image = req.file?.filename as string
+      const newProduct = new CreateProductDTO()
+      newProduct.title = title
+      newProduct.description = description
+      newProduct.price = price as number
+      newProduct.categoryId = categoryId as number
+      newProduct.image = image
+      console.log('newProduct', newProduct)
+      const product = await this.productService.createProduct(newProduct)
+      res.status(201).json({
+        status: 201,
+        message: 'Create product successfully',
+        data: classToPlain(product)
+      })
+      return
+    } catch (error) {
+      res.status(400).json({
+        status: 400,
+        message: 'Created Failed',
+        data: error
+      })
+      return
+    }
   }
   async updateProduct(req: Request, res: Response) {
-    const id = req.params.id
-    const { title, description, price, categoryId } = req.body
-    console.log('body', req.body)
-    const image = req.file?.filename as string
-    const newProduct = new UpdateProductDTO()
-    newProduct.id = id
-    newProduct.title = title
-    newProduct.description = description
-    newProduct.price = price as number
-    newProduct.categoryId = categoryId as number
-    newProduct.image = image
-    console.log('newProduct', newProduct)
-    const product = await this.productService.updateProduct(newProduct)
-    res.status(200).json({
-      status: 200,
-      message: 'Update product successfully',
-      data: classToPlain(product)
-    })
-    return
+    try {
+      const id = req.params.id
+      const { title, description, price, categoryId } = req.body
+      console.log('body', req.body)
+      const image = req.file?.filename as string
+      const newProduct = new UpdateProductDTO()
+      newProduct.id = id
+      newProduct.title = title
+      newProduct.description = description
+      newProduct.price = price as number
+      newProduct.categoryId = categoryId as number
+      newProduct.image = image
+      console.log('newProduct', newProduct)
+      const product = await this.productService.updateProduct(newProduct)
+      res.status(200).json({
+        status: 200,
+        message: 'Update product successfully',
+        data: classToPlain(product)
+      })
+      return
+    } catch (error) {
+      res.status(400).json({
+        status: 400,
+        message: 'Updated Failed',
+        data: error
+      })
+      return
+    }
   }
 }

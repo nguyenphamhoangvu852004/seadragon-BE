@@ -1,5 +1,4 @@
 import 'dotenv/config'
-
 export const env = {
   PORT: Number(process.env.PORT),
   DB_HOST: process.env.DB_HOST,
@@ -18,5 +17,11 @@ export const env = {
   ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET as string,
   REFRESH_TOKEN_SECRET: process.env.REFRESH_TOKEN_SECRET as string,
   ACCESS_TOKEN_EXPIRES_IN: process.env.ACCESS_TOKEN_EXPIRES_IN as string,
-  REFRESH_TOKEN_EXPIRES_IN: process.env.REFRESH_TOKEN_EXPIRES_IN as string
+  REFRESH_TOKEN_EXPIRES_IN: process.env.REFRESH_TOKEN_EXPIRES_IN as string,
+
+  MAIL_HOST: process.env.MAIL_HOST,
+  MAIL_PORT: Number(process.env.MAIL_PORT),
+  MAIL_USER: process.env.MAIL_USER,
+  MAIL_PASS: process.env.MAIL_PASS,
+  MAIL_ADMIN_RECEIVER: process.env.MAIL_ADMIN_RECEIVER
 }
