@@ -35,13 +35,13 @@ const initRole = async () => {
 }
 const initAdmin = async () => {
   try {
-    new InitAdmin()
+    const newInitAdmin = new InitAdmin()
+    await newInitAdmin.init()
   } catch (error) {
     logger.error('❌ Init admin failed:', error)
     process.exit(1) // Exit process on failure
   }
 }
-
 
 /**
  * Initialize Express Application
