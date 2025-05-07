@@ -71,6 +71,7 @@ export default class AccountRepoImpl implements IAccountRepo {
           roles: true
         }
       })
+      
       return listAccount
     } catch (error: Error | any) {
       throw new Error(error.message)

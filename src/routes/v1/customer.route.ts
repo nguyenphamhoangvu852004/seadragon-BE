@@ -11,6 +11,7 @@ const controller = new CustomerController(service)
 router.get('/', controller.getAllCustomers.bind(controller))
 router.get(
   '/temporary',
+
   controller.getAllDeletedTemporaryCustomers.bind(controller)
 )
 router.get('/:id', controller.getDetailCustomers.bind(controller))

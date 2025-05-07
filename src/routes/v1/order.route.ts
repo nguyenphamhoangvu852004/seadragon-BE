@@ -15,7 +15,12 @@ const controller = new OrderController(service)
 
 const ROLENAME = [RoleName.ADMIN, RoleName.ORDER]
 
-router.get('/', verifyToken(), controller.getAllOrder.bind(controller))
+router.get(
+  '/',
+  verifyToken(),
+  verifyRole(ROLENAME),
+  controller.getAllOrder.bind(controller)
+)
 router.get(
   '/temporary',
   verifyToken(),
@@ -30,8 +35,6 @@ router.get(
 )
 router.post(
   '/',
-  verifyToken(),
-  verifyRole(ROLENAME),
   controller.createOrder.bind(controller)
 )
 router.put(
@@ -56,8 +59,6 @@ router.delete(
 )
 router.delete(
   '/',
-  verifyToken(),
-  verifyRole(ROLENAME),
   controller.deleteOrders.bind(controller)
 )
 export const orderRouter = router
