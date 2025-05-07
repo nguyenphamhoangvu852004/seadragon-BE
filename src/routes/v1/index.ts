@@ -6,9 +6,9 @@ import { acccountRouter } from './account.route'
 import { customerRouter } from './customer.route'
 import { blogRouter } from './blog.route'
 import { orderRouter } from './order.route'
-import { RoleName } from '../../entities/roles.entity'
 import { verifyToken } from '../../middleware/verifyToken'
 import { verifyRole } from '../../middleware/verifyRole'
+import { RoleName } from '../../utils/enum'
 const router = Router()
 
 const ROLENAME_ROUTE_ACCOUNT = [RoleName.ADMIN]

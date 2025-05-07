@@ -122,6 +122,7 @@ export default class AccountController {
       return
     }
   }
+
   async deleteAccounts(req: Request, res: Response) {
     try {
       const { ids } = req.body

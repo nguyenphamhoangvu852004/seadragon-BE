@@ -8,12 +8,7 @@ import {
 import { BaseEntity } from '../shared/baseEntity'
 import { Products } from './products.entity'
 import { Customers } from './customers.entity'
-
-export enum OrderStatus {
-  PROCESSING = 'PROCESSING',
-  PROCESSED = 'PROCESSED',
-  CANCEL = 'CANCEL'
-}
+import { OrderStatus } from '../utils/enum'
 
 @Entity('orders')
 export class Orders extends BaseEntity {

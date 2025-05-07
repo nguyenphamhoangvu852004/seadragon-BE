@@ -4,7 +4,7 @@ import AccountServiceImpl from '../../modules/account/service/AccountServiceImpl
 import AccountController from '../../modules/account/account.controller'
 import { verifyToken } from '../../middleware/verifyToken'
 import { verifyRole } from '../../middleware/verifyRole'
-import { RoleName } from '../../entities/roles.entity'
+import { RoleName } from '../../utils/enum'
 const router = Router()
 
 const repo = new AccountRepoImpl()

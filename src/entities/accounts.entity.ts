@@ -9,11 +9,7 @@ import {
 import { BaseEntity } from '../shared/baseEntity'
 import { Roles } from './roles.entity'
 import { Blogs } from './blog.entity'
-export enum AccountStatus {
-  ACTIVE = 'ACTIVE',
-  INACTIVE = 'INACTIVE',
-  DELETED = 'DELETED'
-}
+import { AccountStatus } from '../utils/enum'
 @Entity('accounts')
 export class Accounts extends BaseEntity {
   @PrimaryGeneratedColumn({
@@ -53,4 +49,9 @@ export class Accounts extends BaseEntity {
 
   @OneToMany(() => Blogs, (blog) => blog.account)
   blogs!: Blogs[]
+
+  constructor(data?: Partial<Accounts>) {
+    super()
+    Object.assign(this, data)
+  }
 }
