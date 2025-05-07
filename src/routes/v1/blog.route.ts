@@ -3,9 +3,9 @@ import BlogRepoImpl from '../../modules/blog/repo/BlogRepoImpl'
 import BlogServiceImpl from '../../modules/blog/service/BlogServiceImpl'
 import BlogController from '../../modules/blog/blog.controller'
 import { uploadBlogs } from '../../middleware/uploads'
-import { RoleName } from '../../entities/roles.entity'
 import { verifyToken } from '../../middleware/verifyToken'
 import { verifyRole } from '../../middleware/verifyRole'
+import { RoleName } from '../../utils/enum'
 const router = Router()
 
 const repo = new BlogRepoImpl()

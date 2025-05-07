@@ -2,9 +2,9 @@ import { Router } from 'express'
 import CategoryController from '../../modules/category/category.controller'
 import CategoryServiceImpl from '../../modules/category/service/CategoryServiceImpl'
 import CategoryRepoIpml from '../../modules/category/repo/CategoryRepoImpl'
-import { RoleName } from '../../entities/roles.entity'
 import { verifyToken } from '../../middleware/verifyToken'
 import { verifyRole } from '../../middleware/verifyRole'
+import { RoleName } from '../../utils/enum'
 const router = Router()
 
 //Get Category

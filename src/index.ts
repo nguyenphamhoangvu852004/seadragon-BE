@@ -7,6 +7,8 @@ import { env } from './config/enviroment'
 import logger from './config/logger'
 import { v1Router } from './routes/v1'
 import path from 'path'
+import InitAdmin from './modules/admin/init.admin'
+import InitRole from './modules/role/init.role'
 
 // Server Configuration
 const PORT = env.PORT
@@ -23,6 +25,23 @@ const connectDatabase = async () => {
     process.exit(1) // Exit process on failure
   }
 }
+const initRole = async () => {
+  try {
+    new InitRole()
+  } catch (error) {
+    logger.error('❌ Init role failed:', error)
+    process.exit(1) // Exit process on failure
+  }
+}
+const initAdmin = async () => {
+  try {
+    new InitAdmin()
+  } catch (error) {
+    logger.error('❌ Init admin failed:', error)
+    process.exit(1) // Exit process on failure
+  }
+}
+
 
 /**
  * Initialize Express Application
@@ -73,5 +92,7 @@ const startServer = () => {
  */
 ;(async () => {
   await connectDatabase()
+  await initRole()
+  await initAdmin()
   startServer()
 })()

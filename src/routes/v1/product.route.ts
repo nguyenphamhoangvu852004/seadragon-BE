@@ -5,7 +5,7 @@ import ProductController from '../../modules/product/product.controller'
 import { uploadProducts } from '../../middleware/uploads'
 import { verifyToken } from '../../middleware/verifyToken'
 import { verifyRole } from '../../middleware/verifyRole'
-import { RoleName } from '../../entities/roles.entity'
+import { RoleName } from '../../utils/enum'
 const router = Router()
 
 export const repo = new ProductRepoImpl()

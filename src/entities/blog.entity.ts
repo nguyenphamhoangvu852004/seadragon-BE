@@ -8,12 +8,6 @@ import {
 import { BaseEntity } from '../shared/baseEntity'
 import { Accounts } from './accounts.entity'
 
-export enum BlogStatus {
-  ACTIVE = 'ACTIVE',
-  INACTIVE = 'INACTIVE',
-  DELETED = 'DELETED'
-}
-
 @Entity('blogs')
 export class Blogs extends BaseEntity {
   @PrimaryGeneratedColumn()
@@ -48,10 +42,6 @@ export class Blogs extends BaseEntity {
   })
   public isDeleted!: boolean
 
-
-  /**
-   * Set the viewAmount of the blog to 0
-   */
   setDefaultViewAmount() {
     this.viewAmount = 0
   }
