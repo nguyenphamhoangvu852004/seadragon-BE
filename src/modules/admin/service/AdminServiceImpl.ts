@@ -16,12 +16,12 @@ export default class AdminServiceImpl implements IAdminService {
   async initAdmin(): Promise<any> {
     try {
       const isExist = await this.accountRepo.checkAccountExistByEmail(
-        env.INIT_ADMIN_EMAIL
+        env.INIT_ADMIN_EMAIL as string
       )
       log(env.INIT_ADMIN_EMAIL)
       log(isExist)
       if (!isExist) {
-        const adminPass = env.INIT_ADMIN_PASSWORD
+        const adminPass = env.INIT_ADMIN_PASSWORD as string
         const hashedPassword = await hashPassword(adminPass)
         const admin = await this.accountRepo.createAccount({
           username: env.INIT_ADMIN_USERNAME,

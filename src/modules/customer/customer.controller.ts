@@ -19,13 +19,22 @@ export default class CustomerController {
     return
   }
   async getAllDeletedTemporaryCustomers(req: Request, res: Response) {
-    const list = await this.customerService.getAllDeletedTemporaryCustomers()
-    res.status(200).json({
-      status: 200,
-      message: 'Get List Customer Success',
-      data: classToPlain(list)
-    })
-    return
+    try {
+      const list = await this.customerService.getAllDeletedTemporaryCustomers()
+      res.status(200).json({
+        status: 200,
+        message: 'Get List Customer Success',
+        data: classToPlain(list)
+      })
+      return
+    } catch (error) {
+      res.status(400).json({
+        status: 400,
+        message: error instanceof Error ? error.message : 'An error occurred',
+        data: {}
+      })
+      return
+    }
   }
 
   async createCustomer(req: Request, res: Response) {

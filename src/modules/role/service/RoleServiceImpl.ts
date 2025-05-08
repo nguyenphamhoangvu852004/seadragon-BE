@@ -16,16 +16,16 @@ export default class RoleServiceImpl implements IRoleService {
       throw new Error(error.message)
     }
   }
-  getRoleById(id: string): Promise<any> {
-    throw new Error('Method not implemented.')
-  }
-  getAllRoles(): Promise<any[]> {
-    throw new Error('Method not implemented.')
-  }
-  updateRole(id: string, data: any): Promise<any> {
-    throw new Error('Method not implemented.')
-  }
-  deleteRole(id: string): Promise<void> {
-    throw new Error('Method not implemented.')
-  }
+  // getRoleById(id: string): Promise<any> {
+  //   throw new Error('Method not implemented.')
+  // }
+  // getAllRoles(): Promise<any[]> {
+  //   throw new Error('Method not implemented.')
+  // }
+  // updateRole(id: string, data: any): Promise<any> {
+  //   throw new Error('Method not implemented.')
+  // }
+  // deleteRole(id: string): Promise<void> {
+  //   throw new Error('Method not implemented.')
+  // }
 }

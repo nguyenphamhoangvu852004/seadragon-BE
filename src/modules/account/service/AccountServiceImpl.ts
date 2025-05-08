@@ -10,7 +10,7 @@ import {
   RolePayload,
   UserPayload
 } from '../dto/login.account.dto'
-import jwt from 'jsonwebtoken'
+import { sign } from 'jsonwebtoken'
 import { env } from '../../../config/enviroment'
 import { Accounts } from '../../../entities/accounts.entity'
 
@@ -23,6 +23,7 @@ export default class AccountServiceImpl implements IAccountService {
   async createAccount(data: CreateAccountDTO): Promise<any> {
     try {
       const { username, email, password, confirmPassword } = data
+      log(username, email, password, confirmPassword)
       // kiểm tra 2 pass, bên FE kiểm rồi
       // gọi repo kiểm tra email tồn tại
       if (await this.repo.checkAccountExistByEmail(email)) {
@@ -76,20 +77,22 @@ export default class AccountServiceImpl implements IAccountService {
         throw new Error('Password is incorrect')
       }
 
-      const accessToken = jwt.sign(
+      const accessToken = sign(
         { ...userPayload },
         env.ACCESS_TOKEN_SECRET as string,
         {
-          expiresIn: env.ACCESS_TOKEN_EXPIRES_IN
+          expiresIn: env.ACCESS_TOKEN_EXPIRES_IN as number
         }
       )
-      const refreshToken = jwt.sign(
+
+      const refreshToken = sign(
         { ...userPayload },
         env.REFRESH_TOKEN_SECRET as string,
         {
-          expiresIn: env.REFRESH_TOKEN_EXPIRES_IN
+          expiresIn: env.REFRESH_TOKEN_EXPIRES_IN as number
         }
       )
+
       log('accessToken', accessToken)
       log('refreshToken', refreshToken)
       const dto = new LoginAccountOutputDTO()
@@ -119,7 +122,9 @@ export default class AccountServiceImpl implements IAccountService {
   async getListAccount(): Promise<Accounts[]> {
     try {
       const list: Accounts[] = await this.repo.getList()
-    const filteredList = list.filter(account => account.email !== env.INIT_ADMIN_EMAIL)
+      const filteredList = list.filter(
+        (account) => account.email !== env.INIT_ADMIN_EMAIL
+      )
       return filteredList
     } catch (error: Error | any) {
       throw new Error(error.message)

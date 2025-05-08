@@ -1,5 +1,6 @@
-import { Orders, OrderStatus } from '../../../entities/orders.entity'
+import { Orders } from '../../../entities/orders.entity'
 import { NotFoundException } from '../../../shared/NotFound.exeception'
+import { OrderStatus } from '../../../utils/enum'
 import ICustomerRepo from '../../customer/repo/ICustomerRepo'
 import IProductRepo from '../../product/repo/IProductRepo'
 import { CreateOrderInputDto } from '../dto/create.order.dto'

@@ -12,88 +12,146 @@ export default class CategoryController {
   }
 
   async getAllCategories(req: Request, res: Response) {
-    const list = await this.service.getAllCategories()
-    res.status(200).json({
-      status: 200,
-      message: 'Get all categories successfully',
-      data: classToPlain(list)
-    })
-    return
+    try {
+      const list = await this.service.getAllCategories()
+      res.status(200).json({
+        status: 200,
+        message: 'Get all categories successfully',
+        data: classToPlain(list)
+      })
+      return
+    } catch (error) {
+      res.status(400).json({
+        status: 400,
+        message: error instanceof Error ? error.message : 'An error occurred'
+      })
+      return
+    }
   }
 
   async getCategoryById(req: Request, res: Response) {
-    const id = req.params.id
-    const response = await this.service.getCategoryById(id)
-    res.status(200).json({
-      status: 200,
-      message: 'Get category by id successfully',
-      data: classToPlain(response)
-    })
-    return
+    try {
+      const id = req.params.id
+      const response = await this.service.getCategoryById(id)
+      res.status(200).json({
+        status: 200,
+        message: 'Get category by id successfully',
+        data: classToPlain(response)
+      })
+      return
+    } catch (error) {
+      res.status(400).json({
+        status: 400,
+        message: error instanceof Error ? error.message : 'An error occurred'
+      })
+      return
+    }
   }
 
   async createCategory(req: Request, res: Response) {
-    const { name } = req.body
-    const dto = new CreateCategoryDTO()
-    dto.name = name
-    const response = this.service.createCategory(dto)
-    res.status(201).json({
-      status: 201,
-      message: 'Category created successfully',
-      data: classToPlain(response)
-    })
-    return
+    try {
+      const { name } = req.body
+      const dto = new CreateCategoryDTO()
+      dto.name = name
+      const response = this.service.createCategory(dto)
+      res.status(201).json({
+        status: 201,
+        message: 'Category created successfully',
+        data: classToPlain(response)
+      })
+      return
+    } catch (error) {
+      res.status(400).json({
+        status: 400,
+        message: error instanceof Error ? error.message : 'An error occurred'
+      })
+      return
+    }
   }
 
   async updateCategory(req: Request, res: Response) {
-    const id = req.params.id
-    const { name } = req.body
-    const updateCategoryDTO = new UpdateCategoryDTO()
-    updateCategoryDTO.name = name
-    updateCategoryDTO.id = Number(id)
-    const response = await this.service.updateCategory(updateCategoryDTO)
+    try {
+      const id = req.params.id
+      const { name } = req.body
+      const updateCategoryDTO = new UpdateCategoryDTO()
+      updateCategoryDTO.name = name
+      updateCategoryDTO.id = Number(id)
+      const response = await this.service.updateCategory(updateCategoryDTO)
 
-    res.status(200).json({
-      status: 200,
-      message: 'Category updated successfully',
-      data: classToPlain(response)
-    })
-    return
+      res.status(200).json({
+        status: 200,
+        message: 'Category updated successfully',
+        data: classToPlain(response)
+      })
+      return
+    } catch (error) {
+      res.status(400).json({
+        status: 400,
+        message: error instanceof Error ? error.message : 'An error occurred'
+      })
+      return
+    }
   }
 
   async deleteCategory(req: Request, res: Response) {
-    const { ids } = req.body
-    log('ids', ids)
-    const list = await this.service.deleteCategory(ids)
+    try {
+      const { ids } = req.body
+      log('ids', ids)
+      const list = await this.service.deleteCategory(ids)
 
-    res.status(200).json({
-      status: 200,
-      message: 'Category deleted successfully',
-      data: classToPlain(list)
-    })
-    return
+      res.status(200).json({
+        status: 200,
+        message: 'Category deleted successfully',
+        data: classToPlain(list)
+      })
+      return
+    } catch (error) {
+      res.status(400).json({
+        status: 400,
+        message: error instanceof Error ? error.message : 'An error occurred'
+      })
+      return
+    }
   }
 
   async deleteTemporaryController(req: Request, res: Response) {
-    const { ids } = req.body
-    const response = await this.service.deleteTemporaryCategory(ids)
-    log('response', response)
-    res.status(200).json({
-      status: 200,
-      message: 'Delete category successfully',
-      data: classToPlain(response)
-    })
-    return
+    try {
+      const { ids } = req.body
+      const response = await this.service.deleteTemporaryCategory(ids)
+      log('response', response)
+      res.status(200).json({
+        status: 200,
+        message: 'Delete category successfully',
+        data: classToPlain(response)
+      })
+      return
+    } catch (error) {
+      res.status(400).json({
+        status: 400,
+        message: error instanceof Error ? error.message : 'An error occurred',
+        data: {}
+      })
+      return
+    }
   }
   async restoreTemporaryController(req: Request, res: Response) {
-    const id = req.params.id
-    const response = await this.service.restoreTemporaryCategory(Number(id))
-    res.status(200).json({
-      status: 200,
-      message: 'Restore category successfully',
-      data: classToPlain(response)
-    })
-    return
+    try {
+      const id = req.params.id
+      const response = await this.service.restoreTemporaryCategory(Number(id))
+      res.status(200).json({
+        status: 200,
+        message: 'Restore category successfully',
+        data: classToPlain(response)
+      })
+      return
+    } catch (error) {
+      res.status(400).json({
+        status: 400,
+        message: error instanceof Error ? error.message : 'An error occurred',
+        data: {}
+      })
+      return
+    }
   }
   async getAllDeletedTemporaryCategories(req: Request, res: Response) {
     try {
@@ -107,8 +165,10 @@ export default class CategoryController {
     } catch (error) {
       res.status(400).json({
         status: 400,
-        message: error instanceof Error ? error.message : 'An error occurred'
+        message: error instanceof Error ? error.message : 'An error occurred',
+        data: {}
       })
+      return
     }
   }
 }
