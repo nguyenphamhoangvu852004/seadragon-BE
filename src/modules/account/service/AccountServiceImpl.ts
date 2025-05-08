@@ -10,7 +10,7 @@ import {
   RolePayload,
   UserPayload
 } from '../dto/login.account.dto'
-import jwt from 'jsonwebtoken'
+import { sign } from 'jsonwebtoken'
 import { env } from '../../../config/enviroment'
 import { Accounts } from '../../../entities/accounts.entity'
 
@@ -77,20 +77,22 @@ export default class AccountServiceImpl implements IAccountService {
         throw new Error('Password is incorrect')
       }
 
-      const accessToken = jwt.sign(
+      const accessToken = sign(
         { ...userPayload },
         env.ACCESS_TOKEN_SECRET as string,
         {
-          expiresIn: env.ACCESS_TOKEN_EXPIRES_IN
+          expiresIn: env.ACCESS_TOKEN_EXPIRES_IN as number
         }
       )
-      const refreshToken = jwt.sign(
+
+      const refreshToken = sign(
         { ...userPayload },
         env.REFRESH_TOKEN_SECRET as string,
         {
-          expiresIn: env.REFRESH_TOKEN_EXPIRES_IN
+          expiresIn: env.REFRESH_TOKEN_EXPIRES_IN as number
         }
       )
+
       log('accessToken', accessToken)
       log('refreshToken', refreshToken)
       const dto = new LoginAccountOutputDTO()
