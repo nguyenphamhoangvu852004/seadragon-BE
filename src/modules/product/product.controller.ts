@@ -141,6 +141,8 @@ export default class ProductController {
     try {
       const { title, description, price, categoryId } = req.body
       const image = req.file?.filename as string
+      console.log('image', image);
+      
       const newProduct = new CreateProductDTO()
       newProduct.title = title
       newProduct.description = description
