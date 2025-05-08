@@ -34,16 +34,24 @@ export default class ProductController {
     }
   }
   async getAllDeletedTemporaryProducts(req: Request, res: Response) {
-    const categoryId = req.query.categoryId
-    const products = await this.productService.getAllDeletedTemporaryProducts(
-      categoryId as string
-    )
-    res.status(200).json({
-      status: 200,
-      message: 'Get all deleted temporary products successfully',
-      data: classToPlain(products)
-    })
-    return
+    try {
+      const categoryId = req.query.categoryId
+      const products = await this.productService.getAllDeletedTemporaryProducts(
+        categoryId as string
+      )
+      res.status(200).json({
+        status: 200,
+        message: 'Get all deleted temporary products successfully',
+        data: classToPlain(products)
+      })
+      return
+    } catch (error) {
+      res.status(400).json({
+        status: 400,
+        message: error instanceof Error ? error.message : 'An error occurred'
+      })
+      return
+    }
   }
   async getProductById(req: Request, res: Response) {
     try {
@@ -72,15 +80,22 @@ export default class ProductController {
   }
 
   async deleteTemporaryProducts(req: Request, res: Response) {
-    // const id = req.params.id
-    const { ids } = req.body
-    const product = await this.productService.deleteTemporaryProducts(ids)
-    res.status(200).json({
-      status: 200,
-      message: 'Delete product successfully',
-      data: classToPlain(product)
-    })
-    return
+    try {
+      const { ids } = req.body
+      const product = await this.productService.deleteTemporaryProducts(ids)
+      res.status(200).json({
+        status: 200,
+        message: 'Delete product successfully',
+        data: classToPlain(product)
+      })
+      return
+    } catch (error) {
+      res.status(400).json({
+        status: 400,
+        message: error instanceof Error ? error.message : 'An error occurred'
+      })
+      return
+    }
   }
   async restoreTemporaryProduct(req: Request, res: Response) {
     try {
