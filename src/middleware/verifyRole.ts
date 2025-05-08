@@ -1,11 +1,23 @@
 import { log } from 'console'
 import { Request, Response, NextFunction } from 'express'
-import { RoleName } from '../entities/roles.entity'
+import { RoleName } from '../utils/enum'
+interface Role {
+  name: string
+}
+
+
+
+interface UserPayload {
+  id: string
+  email: string
+  username: string
+  roles: Role[]
+}
 
 export function verifyRole(requiedRoles: RoleName[]) {
   return function (req: Request, res: Response, next: NextFunction) {
     try {
-      const userRoles = req.user.roles.map((role) => role.name)
+      const userRoles = (req.user as UserPayload).roles.map((role) => role.name)
 
       const hasPermission = requiedRoles.some((role) =>
         userRoles.includes(role)
