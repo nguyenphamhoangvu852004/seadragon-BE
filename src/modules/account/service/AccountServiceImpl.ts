@@ -23,6 +23,7 @@ export default class AccountServiceImpl implements IAccountService {
   async createAccount(data: CreateAccountDTO): Promise<any> {
     try {
       const { username, email, password, confirmPassword } = data
+      log(username, email, password, confirmPassword)
       // kiểm tra 2 pass, bên FE kiểm rồi
       // gọi repo kiểm tra email tồn tại
       if (await this.repo.checkAccountExistByEmail(email)) {
@@ -119,7 +120,9 @@ export default class AccountServiceImpl implements IAccountService {
   async getListAccount(): Promise<Accounts[]> {
     try {
       const list: Accounts[] = await this.repo.getList()
-    const filteredList = list.filter(account => account.email !== env.INIT_ADMIN_EMAIL)
+      const filteredList = list.filter(
+        (account) => account.email !== env.INIT_ADMIN_EMAIL
+      )
       return filteredList
     } catch (error: Error | any) {
       throw new Error(error.message)
