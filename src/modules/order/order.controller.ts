@@ -11,13 +11,22 @@ export default class OrderController {
   }
 
   async getAllOrder(req: Request, res: Response) {
-    const list = await this.service.getAllOrders()
-    res.status(200).json({
-      status: 200,
-      message: 'Get all orders successfully',
-      data: classToPlain(list)
-    })
-    return
+    try {
+      const list = await this.service.getAllOrders()
+      res.status(200).json({
+        status: 200,
+        message: 'Get all orders successfully',
+        data: classToPlain(list)
+      })
+      return
+    } catch (error) {
+      res.status(400).json({
+        status: 400,
+        message: error instanceof Error ? error.message : 'An error occurred',
+        data: {}
+      })
+      return
+    }
   }
   async getDetailOrder(req: Request, res: Response) {
     try {
