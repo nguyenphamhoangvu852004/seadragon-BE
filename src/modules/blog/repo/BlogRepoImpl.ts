@@ -134,7 +134,8 @@ export default class BlogRepoImpl implements IBlogRepo {
 
   async restoreBlogs(ids: number[]): Promise<Blogs[]> {
     const listBlogs: Blogs[] = []
-    for (const id in ids) {
+    for (const id of ids) {
+      log(id)
       const blog: Blogs | null = await this.blogRepository.findOne({
         where: {
           id: Number(id),
