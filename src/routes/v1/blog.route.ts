@@ -6,6 +6,8 @@ import { uploadBlogs } from '../../middleware/uploads'
 import { verifyToken } from '../../middleware/verifyToken'
 import { verifyRole } from '../../middleware/verifyRole'
 import { RoleName } from '../../utils/enum'
+import { createValidation } from '../validation/blog/create.validation'
+import { updateValidation } from '../validation/blog/update.validation'
 const router = Router()
 
 const repo = new BlogRepoImpl()
@@ -25,6 +27,7 @@ router.post(
   verifyToken(),
   verifyRole(ROLENAME),
   uploadBlogs.single('image'),
+  createValidation,
   controller.createBlog.bind(controller)
 )
 router.get(
@@ -49,6 +52,7 @@ router.put(
   '/temporary',
   verifyToken(),
   verifyRole(ROLENAME),
+  updateValidation,
   controller.restoreTemporaryBlogs.bind(controller)
 )
 router.put(

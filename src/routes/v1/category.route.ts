@@ -6,6 +6,7 @@ import { verifyToken } from '../../middleware/verifyToken'
 import { verifyRole } from '../../middleware/verifyRole'
 import { RoleName } from '../../utils/enum'
 import { createValidation } from '../validation/category/create.validation'
+import { updateValidation } from '../validation/category/update.validation'
 const router = Router()
 
 //Get Category
@@ -44,6 +45,7 @@ router.put(
   '/:id',
   verifyToken(),
   verifyRole(ROLENAME),
+  updateValidation,
   controller.updateCategory.bind(controller)
 )
 router.delete(

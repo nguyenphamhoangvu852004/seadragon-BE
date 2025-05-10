@@ -32,7 +32,7 @@ export class Blogs extends BaseEntity {
   @Column({ type: 'int', nullable: false })
   likeAmount!: number
 
-  @Column({ type: 'varchar', nullable: false })
+  @Column({ type: 'text', nullable: false })
   body!: string
 
   @Column({

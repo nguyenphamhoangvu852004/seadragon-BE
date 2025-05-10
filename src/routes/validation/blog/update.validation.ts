@@ -2,14 +2,14 @@
 import { Request, Response, NextFunction } from 'express'
 import logger from '../../../config/logger'
 import { StatusCodes } from 'http-status-codes'
-import { createValid } from './def'
-export async function createValidation(
+import { updateValid } from './def'
+export async function updateValidation(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
   try {
-    await createValid.validateAsync(req.body, { abortEarly: false })
+    await updateValid.validateAsync(req.body, { abortEarly: false })
     next()
     return
   } catch (error: any) {
