@@ -145,4 +145,32 @@ export default class CustomerController {
       return
     }
   }
+  async updateCustomer(req: Request, res: Response) {
+    try {
+      const id = req.params.id
+      const { fullname, email, address, phoneNumber } = req.body
+      const newDto = new CreateCustomerDto({
+        fullname: fullname,
+        email: email,
+        address: address,
+        phoneNumber: phoneNumber
+      })
+      const product = await this.customerService.updateCustomer(
+        Number(id),
+        newDto
+      )
+      res.status(200).json({
+        status: 200,
+        message: 'Update product successfully',
+        data: classToPlain(product)
+      })
+      return
+    } catch (error) {
+      res.status(400).json({
+        status: 400,
+        message: error instanceof Error ? error.message : 'An error occurred'
+      })
+      return
+    }
+  }
 }

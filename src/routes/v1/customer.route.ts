@@ -53,4 +53,10 @@ router.put(
   verifyRole(ROLENAME),
   controller.restoreTemporaryCustomer.bind(controller)
 )
+router.put(
+  '/:id',
+  verifyToken(),
+  verifyRole(ROLENAME),
+  controller.updateCustomer.bind(controller)
+)
 export const customerRouter = router
