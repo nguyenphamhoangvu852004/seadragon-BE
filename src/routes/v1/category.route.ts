@@ -5,6 +5,8 @@ import CategoryRepoIpml from '../../modules/category/repo/CategoryRepoImpl'
 import { verifyToken } from '../../middleware/verifyToken'
 import { verifyRole } from '../../middleware/verifyRole'
 import { RoleName } from '../../utils/enum'
+import { createValidation } from '../validation/category/create.validation'
+import { updateValidation } from '../validation/category/update.validation'
 const router = Router()
 
 //Get Category
@@ -30,21 +32,31 @@ router.post(
   '/',
   verifyToken(),
   verifyRole(ROLENAME),
+  createValidation,
   controller.createCategory.bind(controller)
 )
-router.delete('/', verifyToken(),
-  verifyRole(ROLENAME),controller.deleteCategory.bind(controller))
-router.put('/:id', verifyToken(),
-  verifyRole(ROLENAME),controller.updateCategory.bind(controller))
+router.delete(
+  '/',
+  verifyToken(),
+  verifyRole(ROLENAME),
+  controller.deleteCategory.bind(controller)
+)
+router.put(
+  '/:id',
+  verifyToken(),
+  verifyRole(ROLENAME),
+  updateValidation,
+  controller.updateCategory.bind(controller)
+)
 router.delete(
   '/temporary',
-verifyToken(),
+  verifyToken(),
   verifyRole(ROLENAME),
   controller.deleteTemporaryController.bind(controller)
 )
 router.put(
   '/temporary/:id',
-verifyToken(),
+  verifyToken(),
   verifyRole(ROLENAME),
   controller.restoreTemporaryController.bind(controller)
 )

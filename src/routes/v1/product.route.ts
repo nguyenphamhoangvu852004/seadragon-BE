@@ -6,6 +6,7 @@ import { uploadProducts } from '../../middleware/uploads'
 import { verifyToken } from '../../middleware/verifyToken'
 import { verifyRole } from '../../middleware/verifyRole'
 import { RoleName } from '../../utils/enum'
+import { createValidation } from '../validation/product/create.validation'
 const router = Router()
 
 export const repo = new ProductRepoImpl()
@@ -21,10 +22,7 @@ router.get(
   verifyRole(ROLENAME),
   controller.getAllDeletedTemporaryProducts.bind(controller)
 )
-router.get(
-  '/:id',
-  controller.getProductById.bind(controller)
-)
+router.get('/:id', controller.getProductById.bind(controller))
 router.delete(
   '/temporary',
   verifyToken(),
@@ -49,6 +47,7 @@ router.post(
   verifyToken(),
   verifyRole(ROLENAME),
   uploadProducts.single('image'),
+  createValidation,
   controller.createProduct.bind(controller)
 )
 router.put(
