@@ -5,6 +5,7 @@ import { AppDataSource } from '../../../config/data-source'
 import CreateCustomerDto from '../dto/create.customer.dto'
 import { log } from 'console'
 import { NotFoundException } from '../../../shared/NotFound.exeception'
+import { UpdateCustomerDto } from '../dto/update.customer.dto'
 
 export default class CustomerRepoImpl implements ICustomerRepo {
   customerRepository: Repository<Customers>
@@ -119,5 +120,24 @@ export default class CustomerRepoImpl implements ICustomerRepo {
     }
     await this.customerRepository.remove(list)
     return list
+  }
+
+  async updateCustomer(
+    id: number,
+    data: UpdateCustomerDto
+  ): Promise<Customers> {
+    const customer = await this.customerRepository.findOneBy({
+      id: Number(id)
+    })
+    if (!customer) {
+      throw new Error('Customer not found')
+    }
+    customer.fullname = data.fullname
+    customer.email = data.email
+    customer.phoneNumber = data.phoneNumber
+    customer.address = data.address
+    customer.updatedAt = new Date()
+    await this.customerRepository.save(customer)
+    return customer
   }
 }

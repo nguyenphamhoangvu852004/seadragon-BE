@@ -4,6 +4,7 @@ import { Customers } from '../../../entities/customers.entity'
 import { BadRequestException } from '../../../shared/BadRequest.exeception'
 import { NotFoundException } from '../../../shared/NotFound.exeception'
 import CreateCustomerDto from '../dto/create.customer.dto'
+import { UpdateCustomerDto } from '../dto/update.customer.dto'
 import ICustomerRepo from '../repo/ICustomerRepo'
 import ICustomerService from './ICustomerService'
 
@@ -80,6 +81,18 @@ export default class CustomerServiceImpl implements ICustomerService {
     try {
       const product = await this.repo.deleteCustomers(ids)
       return product
+    } catch (error: Error | any) {
+      throw new Error(error.message)
+    }
+  }
+
+  async updateCustomer(
+    id: number,
+    data: UpdateCustomerDto
+  ): Promise<Customers> {
+    try {
+      const cus = await this.repo.updateCustomer(id, data)
+      return cus
     } catch (error: Error | any) {
       throw new Error(error.message)
     }
