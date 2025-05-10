@@ -74,7 +74,7 @@ const startServer = () => {
   // )
 
   app.use((req: Request, res: Response, next: NextFunction) => {
-    logger.warn(req.method + ' ' + req.originalUrl)
+    logger.info(req.method + ' ' + req.originalUrl)
     next()
   })
 
